@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
+/* next-themes toggles a `.dark` class on <html> — this makes Tailwind's
+   `dark:` variant follow that class instead of only prefers-color-scheme,
+   so Light/Dark/System in Settings actually works. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Finora brand palette — see Logo/ brand sheet. Teal primary (#0D9488) with
+   a Tailwind-slate neutral scale. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f9;
+  --foreground: #0f172a;
+  --foreground-muted: #64748b;
+  --border: #e2e8f0;
+  --brand-from: #14b8a6;
+  --brand-to: #0f766e;
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #dc2626;
+  --focus-ring: #0d9488;
+}
+
+.dark {
+  --background: #0f172a;
+  --surface: #334155;
+  --surface-muted: #1e293b;
+  --foreground: #f1f5f9;
+  --foreground-muted: #94a3b8;
+  --border: #475569;
+  --brand-from: #14b8a6;
+  --brand-to: #0d9488;
+  --success: #22c55e;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --focus-ring: #2dd4bf;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
   --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-brand-from: var(--brand-from);
+  --color-brand-to: var(--brand-to);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-focus-ring: var(--focus-ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Elderly-friendly baseline: everything built on rem scales up with it
+   (spacing, type, tap targets) without touching every utility class. */
+html {
+  font-size: 17px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+.brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+}
+
+.brand-gradient-text {
+  background-image: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

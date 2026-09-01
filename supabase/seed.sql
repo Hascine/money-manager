@@ -1,0 +1,27 @@
+-- Dev-only seed data, applied automatically by `supabase db reset`.
+-- Mirrors the example household from the original ERD (Badz + Istri).
+--
+-- Note: auth.users rows normally come from Supabase Auth sign-up, which is what
+-- fires handle_new_user() to create each person's personal space. For local dev
+-- convenience, create two users via `supabase auth` / the Studio UI first
+-- (e.g. badz@example.com / istri@example.com), then re-run this file, or use
+-- the commented block below with real ids from `select id, email from auth.users;`.
+
+-- Example (uncomment and fill in real ids after creating the two dev users):
+--
+-- do $$
+-- declare
+--   v_badz_id  uuid := '00000000-0000-0000-0000-000000000001';
+--   v_istri_id uuid := '00000000-0000-0000-0000-000000000002';
+--   v_family_id uuid;
+-- begin
+--   v_family_id := create_collaborative_space('Keluarga Badz');
+--   -- create_collaborative_space runs as the calling user (badz); to also add
+--   -- istri as admin for local testing, insert directly since this script runs
+--   -- with elevated seed privileges:
+--   insert into space_members (space_id, profile_id, role, joined_at)
+--   values (v_family_id, v_istri_id, 'admin', now());
+--
+--   insert into accounts (space_id, name, type, provider, created_by)
+--   values (v_family_id, 'BCA Keluarga', 'bank', 'BCA', v_badz_id);
+-- end $$;
