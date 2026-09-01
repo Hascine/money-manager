@@ -4,11 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
-import { Select } from "@/components/ui/field";
 import { BackLink } from "@/components/ui/back-link";
+import { RoleSelect } from "@/components/role-select";
 import type { MemberRole } from "@/lib/supabase/database.types";
-
-const ROLES: MemberRole[] = ["owner", "admin", "member", "viewer"];
 
 export default async function MembersPage({
   params,
@@ -66,18 +64,7 @@ export default async function MembersPage({
             <div className="flex items-center gap-2">
               <form action={updateRole}>
                 <input type="hidden" name="member_id" value={member.id} />
-                <Select
-                  name="role"
-                  defaultValue={member.role}
-                  onChange={(e) => e.currentTarget.form?.requestSubmit()}
-                  className="h-10 w-32 text-sm"
-                >
-                  {ROLES.map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </Select>
+                <RoleSelect defaultValue={member.role} />
               </form>
               <form action={removeMember}>
                 <input type="hidden" name="member_id" value={member.id} />

@@ -29,7 +29,7 @@ export default async function NewSpacePage() {
       <Card>
         <form action={create} className="flex flex-col gap-4">
           <Field label={t.fieldSpaceName}>
-            <Input name="name" type="text" required placeholder="Keluarga Badz" />
+            <Input name="name" type="text" required placeholder="Keluarga Bahagia" />
           </Field>
           <SubmitButton size="lg" className="mt-2 w-full">
             {t.createSpace}

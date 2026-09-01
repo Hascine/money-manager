@@ -22,7 +22,7 @@ export function AccountFormFields({
   return (
     <>
       <Field label={t.fieldAccountName}>
-        <Input name="name" required defaultValue={defaultValues?.name} placeholder="BCA Badz" />
+        <Input name="name" required defaultValue={defaultValues?.name} placeholder="BCA Utama" />
       </Field>
       <Field label={t.fieldAccountType}>
         <Select name="type" defaultValue={defaultValues?.type ?? "bank"}>
