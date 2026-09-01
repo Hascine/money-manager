@@ -39,6 +39,25 @@ export async function getUserSpaces(): Promise<UserSpace[]> {
     .sort((a, b) => (a.type === "PERSONAL" ? -1 : b.type === "PERSONAL" ? 1 : 0));
 }
 
+/** The current user's role in a specific space, or null if not a member. */
+export async function getMyRole(spaceId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data } = await supabase
+    .from("space_members")
+    .select("role")
+    .eq("space_id", spaceId)
+    .eq("profile_id", user.id)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  return data?.role ?? null;
+}
+
 export async function getSpace(spaceId: string) {
   const supabase = await createClient();
   const { data } = await supabase

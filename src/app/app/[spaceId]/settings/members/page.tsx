@@ -20,9 +20,12 @@ export default async function MembersPage({
     data: { user },
   } = await supabase.auth.getUser();
 
+  // space_members has two FKs into profiles (profile_id and invited_by), so
+  // the embed must name which one to resolve — otherwise PostgREST returns
+  // an ambiguous-relationship error and this silently renders an empty list.
   const { data: members } = await supabase
     .from("space_members")
-    .select("id, role, profiles(id, display_name)")
+    .select("id, role, profiles!profile_id(id, display_name)")
     .eq("space_id", spaceId)
     .is("deleted_at", null);
 

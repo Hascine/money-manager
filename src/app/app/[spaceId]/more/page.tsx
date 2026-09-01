@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Tag, Settings, Users, Link2, User, Palette, Languages, GraduationCap, ChevronRight } from "lucide-react";
-import { getSpace } from "@/lib/spaces";
+import { getSpace, getMyRole } from "@/lib/spaces";
 import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
@@ -34,7 +34,7 @@ export default async function MorePage({
   params: Promise<{ spaceId: string }>;
 }) {
   const { spaceId } = await params;
-  const space = await getSpace(spaceId);
+  const [space, role] = await Promise.all([getSpace(spaceId), getMyRole(spaceId)]);
   const t = await getDictionary();
 
   return (
@@ -48,7 +48,9 @@ export default async function MorePage({
           <MenuRow href={`/app/${spaceId}/settings`} icon={Settings} label={t.menuSpaceSettings} />
           {space?.type === "COLLABORATIVE" && (
             <>
-              <MenuRow href={`/app/${spaceId}/settings/members`} icon={Users} label={t.menuMembers} />
+              {role === "owner" && (
+                <MenuRow href={`/app/${spaceId}/settings/members`} icon={Users} label={t.menuMembers} />
+              )}
               <MenuRow href={`/app/${spaceId}/settings/invites`} icon={Link2} label={t.menuInvites} />
             </>
           )}
