@@ -135,7 +135,6 @@ const id = {
 
   // Space settings
   spaceSettingsTitle: "Pengaturan space",
-  manageMembers: "Kelola anggota",
   manageInvites: "Kelola undangan",
   deleteSpace: "Hapus space ini",
   membersTitle: "Anggota",
@@ -321,7 +320,6 @@ const en: typeof id = {
 
   // Space settings
   spaceSettingsTitle: "Space settings",
-  manageMembers: "Manage members",
   manageInvites: "Manage invites",
   deleteSpace: "Delete this space",
   membersTitle: "Members",
