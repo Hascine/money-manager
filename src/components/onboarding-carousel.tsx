@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Sparkles, Users, CirclePlus, ArrowLeftRight, PartyPopper } from "lucide-react";
+import { Sparkles, Users, CirclePlus, ArrowLeftRight, Smartphone, PartyPopper } from "lucide-react";
 import { useTranslations } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
+import { InstallPwaPrompt } from "@/components/install-pwa-prompt";
 import { cn } from "@/lib/cn";
 
 export function OnboardingCarousel({ action }: { action: () => Promise<void> }) {
@@ -16,7 +17,8 @@ export function OnboardingCarousel({ action }: { action: () => Promise<void> }) 
     { icon: Users, title: t.onboarding2Title, desc: t.onboarding2Desc },
     { icon: CirclePlus, title: t.onboarding3Title, desc: t.onboarding3Desc },
     { icon: ArrowLeftRight, title: t.onboarding4Title, desc: t.onboarding4Desc },
-    { icon: PartyPopper, title: t.onboarding5Title, desc: t.onboarding5Desc },
+    { icon: Smartphone, title: t.onboarding5Title, desc: t.onboarding5Desc, extra: <InstallPwaPrompt /> },
+    { icon: PartyPopper, title: t.onboarding6Title, desc: t.onboarding6Desc },
   ];
 
   const isLast = step === slides.length - 1;
@@ -51,6 +53,7 @@ export function OnboardingCarousel({ action }: { action: () => Promise<void> }) 
           <h1 className="text-2xl font-bold text-foreground">{current.title}</h1>
           <p className="max-w-sm text-lg text-foreground-muted">{current.desc}</p>
         </div>
+        {"extra" in current && <div className="w-full max-w-sm">{current.extra}</div>}
       </div>
 
       <div className="flex flex-col gap-4">

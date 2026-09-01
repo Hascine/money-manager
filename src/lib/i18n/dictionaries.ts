@@ -181,8 +181,17 @@ const id = {
   onboarding3Desc: "Tekan tombol + di tengah bawah untuk catat Pemasukan atau Pengeluaran kapan saja.",
   onboarding4Title: "Transfer antar space",
   onboarding4Desc: "Dari Family Space, Anda bisa transfer langsung ke wallet Personal anggota lain — misalnya kirim uang belanja dari kas keluarga ke dompet pribadi pasangan.",
-  onboarding5Title: "Semua siap!",
-  onboarding5Desc: "Sekarang Anda bisa mulai mencatat keuangan. Lupa caranya? Buka lagi tutorial ini kapan saja dari menu Lainnya → Lihat tutorial.",
+  onboarding5Title: "Pasang di layar utama",
+  onboarding5Desc: "Biar Finora kebuka seperti aplikasi asli tanpa browser. Ikuti langkah di bawah sesuai HP Anda.",
+  onboarding6Title: "Semua siap!",
+  onboarding6Desc: "Sekarang Anda bisa mulai mencatat keuangan. Lupa caranya? Buka lagi tutorial ini kapan saja dari menu Lainnya → Lihat tutorial.",
+
+  pwaAlreadyInstalled: "Sudah terpasang di perangkat ini",
+  pwaIosStep1: "Tap ikon Share di Safari",
+  pwaIosStep2: "Pilih \"Tambah ke Layar Utama\", lalu tap \"Tambah\".",
+  pwaInstallCta: "Pasang aplikasi",
+  pwaAndroidFallbackStep1: "Buka menu titik tiga di browser",
+  pwaAndroidFallbackStep2: "Pilih \"Install app\" atau \"Tambahkan ke layar Utama\".",
 };
 
 const en: typeof id = {
@@ -366,8 +375,17 @@ const en: typeof id = {
   onboarding3Desc: "Tap the + button at the bottom center to record an Income or Expense anytime.",
   onboarding4Title: "Transfer between spaces",
   onboarding4Desc: "From a Family Space, you can transfer directly to another member's Personal wallet — for example sending grocery money from the family fund to your partner's personal wallet.",
-  onboarding5Title: "You're all set!",
-  onboarding5Desc: "You can now start tracking your finances. Forgot how something works? Reopen this tutorial anytime from More → View tutorial.",
+  onboarding5Title: "Add it to your home screen",
+  onboarding5Desc: "Open Finora like a real app, no browser bar. Follow the steps below for your phone.",
+  onboarding6Title: "You're all set!",
+  onboarding6Desc: "You can now start tracking your finances. Forgot how something works? Reopen this tutorial anytime from More → View tutorial.",
+
+  pwaAlreadyInstalled: "Already installed on this device",
+  pwaIosStep1: "Tap the Share icon in Safari",
+  pwaIosStep2: "Choose \"Add to Home Screen\", then tap \"Add\".",
+  pwaInstallCta: "Install app",
+  pwaAndroidFallbackStep1: "Open the menu (⋮) in your browser",
+  pwaAndroidFallbackStep2: "Choose \"Install app\" or \"Add to Home screen\".",
 };
 
 export const dictionaries = { id, en };
