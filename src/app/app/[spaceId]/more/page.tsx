@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Tag, Settings, Users, Link2, User, Palette, Languages, GraduationCap, ChevronRight } from "lucide-react";
+import { Tag, PieChart, Settings, Users, Link2, User, Palette, Languages, GraduationCap, ChevronRight } from "lucide-react";
 import { getSpace, getMyRole } from "@/lib/spaces";
 import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
@@ -45,6 +45,7 @@ export default async function MorePage({
         <p className="mb-2 px-1 text-sm font-semibold text-foreground-muted">{t.moreSpaceSection}</p>
         <Card className="divide-y divide-border p-0">
           <MenuRow href={`/app/${spaceId}/categories`} icon={Tag} label={t.menuCategories} />
+          <MenuRow href={`/app/${spaceId}/reports`} icon={PieChart} label={t.menuReports} />
           <MenuRow href={`/app/${spaceId}/settings`} icon={Settings} label={t.menuSpaceSettings} />
           {space?.type === "COLLABORATIVE" && (
             <>
