@@ -16,14 +16,15 @@ export default async function EditTransactionPage({
   const { spaceId, transactionId } = await params;
   const supabase = await createClient();
 
-  const [{ data: transaction }, { data: accounts }, { data: categories }] = await Promise.all([
+  const [{ data: transaction }, { data: accounts }, { data: categories }, { data: pots }] = await Promise.all([
     supabase
       .from("transactions")
-      .select("id, type, account_id, category_id, amount, transaction_date, note")
+      .select("id, type, account_id, category_id, pot_id, amount, transaction_date, note")
       .eq("id", transactionId)
       .single(),
     supabase.from("accounts").select("id, name").eq("space_id", spaceId).is("deleted_at", null).eq("is_active", true),
     supabase.from("categories").select("id, name, type").eq("space_id", spaceId).is("deleted_at", null).eq("is_active", true),
+    supabase.from("pots").select("id, name").eq("space_id", spaceId).is("deleted_at", null).order("created_at"),
   ]);
 
   if (!transaction || (transaction.type !== "income" && transaction.type !== "expense")) notFound();
@@ -34,11 +35,13 @@ export default async function EditTransactionPage({
     "use server";
     const supabase = await createClient();
     const categoryId = String(formData.get("category_id") || "");
+    const potId = String(formData.get("pot_id") || "");
 
     const { error } = await supabase
       .from("transactions")
       .update({
         category_id: categoryId || null,
+        pot_id: potId || null,
         amount: Number(formData.get("amount")),
         transaction_date: String(formData.get("transaction_date")),
         note: String(formData.get("note") || "") || null,
@@ -72,6 +75,7 @@ export default async function EditTransactionPage({
             t={t}
             accounts={accounts ?? []}
             categories={categories ?? []}
+            pots={pots ?? []}
             defaultValues={transaction}
           />
           <Button type="submit" size="lg" className="mt-2 w-full">

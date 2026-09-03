@@ -7,6 +7,7 @@ export type MemberRole = "owner" | "admin" | "member" | "viewer";
 export type AccountType = "cash" | "bank" | "ewallet" | "saving" | "other";
 export type CategoryType = "income" | "expense";
 export type TransactionType = "income" | "expense" | "transfer_in" | "transfer_out";
+export type PotEntryType = "allocation" | "transfer_in" | "transfer_out";
 
 // Every table/view below declares a Relationships array because
 // @supabase/postgrest-js's GenericTable/GenericView require it — see
@@ -220,6 +221,7 @@ export interface Database {
           space_id: string;
           account_id: string;
           category_id: string | null;
+          pot_id: string | null;
           created_by: string;
           type: TransactionType;
           amount: number;
@@ -232,6 +234,7 @@ export interface Database {
         Insert: {
           account_id: string;
           category_id?: string | null;
+          pot_id?: string | null;
           created_by: string;
           type: "income" | "expense";
           amount: number;
@@ -240,6 +243,7 @@ export interface Database {
         };
         Update: {
           category_id?: string | null;
+          pot_id?: string | null;
           amount?: number;
           transaction_date?: string;
           note?: string | null;
@@ -258,6 +262,13 @@ export interface Database {
             columns: ["category_id"];
             isOneToOne: false;
             referencedRelation: "categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "transactions_pot_id_fkey";
+            columns: ["pot_id"];
+            isOneToOne: false;
+            referencedRelation: "pots";
             referencedColumns: ["id"];
           },
         ];
@@ -298,6 +309,70 @@ export interface Database {
           },
         ];
       };
+      pots: {
+        Row: {
+          id: string;
+          space_id: string;
+          name: string;
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          space_id: string;
+          name: string;
+          created_by: string;
+        };
+        Update: {
+          name?: string;
+          deleted_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pots_space_id_fkey";
+            columns: ["space_id"];
+            isOneToOne: false;
+            referencedRelation: "spaces";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pot_entries: {
+        Row: {
+          id: string;
+          pot_id: string;
+          space_id: string;
+          type: PotEntryType;
+          amount: number;
+          note: string | null;
+          entry_date: string;
+          created_by: string;
+          created_at: string;
+          deleted_at: string | null;
+        };
+        Insert: {
+          pot_id: string;
+          space_id: string;
+          type: PotEntryType;
+          amount: number;
+          note?: string | null;
+          entry_date?: string;
+          created_by: string;
+        };
+        Update: {
+          deleted_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pot_entries_pot_id_fkey";
+            columns: ["pot_id"];
+            isOneToOne: false;
+            referencedRelation: "pots";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       account_balances: {
@@ -312,6 +387,14 @@ export interface Database {
         Row: {
           space_id: string;
           total_balance: number;
+        };
+        Relationships: [];
+      };
+      pot_balances: {
+        Row: {
+          pot_id: string;
+          space_id: string;
+          balance: number;
         };
         Relationships: [];
       };
@@ -367,6 +450,7 @@ export interface Database {
       account_type: AccountType;
       category_type: CategoryType;
       transaction_type: TransactionType;
+      pot_entry_type: PotEntryType;
     };
   };
 }

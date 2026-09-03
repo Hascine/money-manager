@@ -46,6 +46,16 @@ export function SpaceRealtimeProvider({ spaceId }: { spaceId: string }) {
         { event: "*", schema: "public", table: "transfers", filter: `to_space_id=eq.${spaceId}` },
         refresh
       )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "pots", filter: `space_id=eq.${spaceId}` },
+        refresh
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "pot_entries", filter: `space_id=eq.${spaceId}` },
+        refresh
+      )
       .subscribe();
 
     return () => {

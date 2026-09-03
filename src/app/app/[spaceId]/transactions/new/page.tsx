@@ -21,9 +21,10 @@ export default async function NewTransactionPage({
   const supabase = await createClient();
   const t = await getDictionary();
 
-  const [{ data: accounts }, { data: categories }] = await Promise.all([
+  const [{ data: accounts }, { data: categories }, { data: pots }] = await Promise.all([
     supabase.from("accounts").select("id, name").eq("space_id", spaceId).is("deleted_at", null).eq("is_active", true),
     supabase.from("categories").select("id, name, type").eq("space_id", spaceId).is("deleted_at", null).eq("is_active", true),
+    supabase.from("pots").select("id, name").eq("space_id", spaceId).is("deleted_at", null).order("created_at"),
   ]);
 
   async function create(formData: FormData) {
@@ -35,10 +36,12 @@ export default async function NewTransactionPage({
     if (!user) redirect("/login");
 
     const categoryId = String(formData.get("category_id") || "");
+    const potId = String(formData.get("pot_id") || "");
 
     const { error } = await supabase.from("transactions").insert({
       account_id: String(formData.get("account_id")),
       category_id: categoryId || null,
+      pot_id: potId || null,
       created_by: user.id,
       type: String(formData.get("type")) as "income" | "expense",
       amount: Number(formData.get("amount")),
@@ -64,6 +67,7 @@ export default async function NewTransactionPage({
             t={t}
             accounts={accounts ?? []}
             categories={categories ?? []}
+            pots={pots ?? []}
             defaultValues={{ type: defaultType }}
           />
           <Button type="submit" size="lg" disabled={!accounts?.length} className="mt-2 w-full">

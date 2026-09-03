@@ -6,15 +6,18 @@ export function TransactionFormFields({
   t,
   accounts,
   categories,
+  pots,
   defaultValues,
 }: {
   t: Dictionary;
   accounts: { id: string; name: string }[];
   categories: { id: string; name: string; type: string }[];
+  pots: { id: string; name: string }[];
   defaultValues?: {
     type?: string;
     account_id?: string;
     category_id?: string | null;
+    pot_id?: string | null;
     amount?: number;
     transaction_date?: string;
     note?: string | null;
@@ -47,6 +50,18 @@ export function TransactionFormFields({
           ))}
         </Select>
       </Field>
+      {pots.length > 0 && (
+        <Field label={t.fieldPot}>
+          <Select name="pot_id" defaultValue={defaultValues?.pot_id ?? ""}>
+            <option value="">-</option>
+            {pots.map((pot) => (
+              <option key={pot.id} value={pot.id}>
+                {pot.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
       <Field label={t.fieldAmount}>
         <AmountInput name="amount" required defaultValue={defaultValues?.amount} />
       </Field>
