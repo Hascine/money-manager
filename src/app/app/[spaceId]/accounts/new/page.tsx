@@ -30,7 +30,6 @@ export default async function NewAccountPage({
       name: String(formData.get("name")),
       type: String(formData.get("type")) as AccountType,
       provider: String(formData.get("provider") || "") || null,
-      account_number: String(formData.get("account_number") || "") || null,
       initial_balance: Number(formData.get("initial_balance") || 0),
       created_by: user.id,
     });

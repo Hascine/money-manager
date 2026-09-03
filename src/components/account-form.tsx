@@ -1,4 +1,5 @@
 import { Field, Input, Select } from "@/components/ui/field";
+import { AmountInput } from "@/components/ui/amount-input";
 import { getAccountTypeLabels } from "@/lib/account-icons";
 import type { AccountType } from "@/lib/supabase/database.types";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -12,8 +13,7 @@ export function AccountFormFields({
     name?: string;
     type?: string;
     provider?: string | null;
-    account_number?: string | null;
-    initial_balance?: number;
+    balance?: number;
   };
 }) {
   const labels = getAccountTypeLabels(t);
@@ -40,12 +40,13 @@ export function AccountFormFields({
           placeholder="BCA, GoPay, ShopeePay..."
         />
       </Field>
-      <Field label={t.fieldAccountNumber}>
-        <Input name="account_number" defaultValue={defaultValues?.account_number ?? ""} />
-      </Field>
-      {defaultValues === undefined && (
+      {defaultValues === undefined ? (
         <Field label={t.fieldInitialBalance}>
-          <Input name="initial_balance" type="number" step="0.01" defaultValue={0} />
+          <AmountInput name="initial_balance" />
+        </Field>
+      ) : (
+        <Field label={t.fieldCurrentBalance} hint={t.fieldCurrentBalanceHint}>
+          <AmountInput name="balance" defaultValue={defaultValues.balance} />
         </Field>
       )}
     </>

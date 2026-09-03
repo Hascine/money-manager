@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Field, Input, Select } from "@/components/ui/field";
+import { AmountInput } from "@/components/ui/amount-input";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/components/language-provider";
 
@@ -81,7 +82,7 @@ export function TransferForm({
       </Field>
 
       <Field label={t.fieldAmount}>
-        <Input name="amount" type="number" step="0.01" min="0.01" required placeholder="0" />
+        <AmountInput name="amount" required />
       </Field>
 
       <Field label={t.fieldDate}>

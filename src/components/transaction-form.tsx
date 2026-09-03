@@ -1,4 +1,5 @@
 import { Field, Input, Select } from "@/components/ui/field";
+import { AmountInput } from "@/components/ui/amount-input";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 export function TransactionFormFields({
@@ -47,15 +48,7 @@ export function TransactionFormFields({
         </Select>
       </Field>
       <Field label={t.fieldAmount}>
-        <Input
-          name="amount"
-          type="number"
-          step="0.01"
-          min="0.01"
-          required
-          defaultValue={defaultValues?.amount}
-          placeholder="0"
-        />
+        <AmountInput name="amount" required defaultValue={defaultValues?.amount} />
       </Field>
       <Field label={t.fieldDate}>
         <Input
