@@ -19,7 +19,11 @@ export default async function EditAccountPage({
   const t = await getDictionary();
 
   const [{ data: account }, { data: balanceRow }] = await Promise.all([
-    supabase.from("accounts").select("id, name, type, provider, is_active").eq("id", accountId).single(),
+    supabase
+      .from("accounts")
+      .select("id, name, type, provider, is_active, include_in_total_balance")
+      .eq("id", accountId)
+      .single(),
     supabase.from("account_balances").select("balance").eq("account_id", accountId).maybeSingle(),
   ]);
 
@@ -49,6 +53,7 @@ export default async function EditAccountPage({
         type: String(formData.get("type")) as AccountType,
         provider: String(formData.get("provider") || "") || null,
         initial_balance: requestedBalance - transactionsTotal,
+        include_in_total_balance: formData.get("include_in_total_balance") === "true",
       })
       .eq("id", accountId);
 

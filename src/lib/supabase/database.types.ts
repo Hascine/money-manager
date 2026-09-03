@@ -42,6 +42,7 @@ export interface Database {
           id: string;
           type: SpaceType;
           name: string;
+          monthly_pot_budget: number | null;
           created_by: string;
           created_at: string;
           updated_at: string;
@@ -50,6 +51,7 @@ export interface Database {
         Insert: never;
         Update: {
           name?: string;
+          monthly_pot_budget?: number | null;
           deleted_at?: string | null;
         };
         Relationships: [
@@ -140,6 +142,7 @@ export interface Database {
           account_number: string | null;
           initial_balance: number;
           is_active: boolean;
+          include_in_total_balance: boolean;
           created_by: string;
           created_at: string;
           updated_at: string;
@@ -153,6 +156,7 @@ export interface Database {
           account_number?: string | null;
           initial_balance?: number;
           is_active?: boolean;
+          include_in_total_balance?: boolean;
           created_by: string;
         };
         Update: {
@@ -162,6 +166,7 @@ export interface Database {
           account_number?: string | null;
           initial_balance?: number;
           is_active?: boolean;
+          include_in_total_balance?: boolean;
           deleted_at?: string | null;
         };
         Relationships: [
@@ -380,6 +385,7 @@ export interface Database {
           account_id: string;
           space_id: string;
           balance: number;
+          include_in_total_balance: boolean;
         };
         Relationships: [];
       };
@@ -419,6 +425,7 @@ export interface Database {
           p_amount: number;
           p_transfer_date: string;
           p_note?: string | null;
+          p_pot_id?: string | null;
         };
         Returns: string;
       };
@@ -428,6 +435,7 @@ export interface Database {
           p_amount: number;
           p_transfer_date: string;
           p_note?: string | null;
+          p_pot_id?: string | null;
         };
         Returns: undefined;
       };

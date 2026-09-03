@@ -22,7 +22,7 @@ export default async function AccountsPage({
   const [{ data: accounts }, balances] = await Promise.all([
     supabase
       .from("accounts")
-      .select("id, name, type, provider, is_active")
+      .select("id, name, type, provider, is_active, include_in_total_balance")
       .eq("space_id", spaceId)
       .is("deleted_at", null)
       .order("created_at"),
@@ -62,6 +62,7 @@ export default async function AccountsPage({
                     {typeLabels[account.type]}
                     {account.provider ? ` · ${account.provider}` : ""}
                     {!account.is_active ? ` · ${t.inactive}` : ""}
+                    {!account.include_in_total_balance ? ` · ${t.excludedFromTotal}` : ""}
                   </p>
                 </div>
                 <p className="font-semibold text-foreground">

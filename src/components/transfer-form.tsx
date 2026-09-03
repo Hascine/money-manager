@@ -20,10 +20,12 @@ export function TransferForm({
   action,
   fromAccounts,
   targets,
+  pots,
 }: {
   action: (formData: FormData) => void;
   fromAccounts: { id: string; name: string }[];
   targets: TransferTarget[];
+  pots: { id: string; name: string }[];
 }) {
   const t = useTranslations();
   const [fromAccountId, setFromAccountId] = useState(fromAccounts[0]?.id ?? "");
@@ -80,6 +82,19 @@ export function TransferForm({
           ))}
         </Select>
       </Field>
+
+      {pots.length > 0 && (
+        <Field label={t.fieldPot}>
+          <Select name="pot_id" defaultValue="">
+            <option value="">-</option>
+            {pots.map((pot) => (
+              <option key={pot.id} value={pot.id}>
+                {pot.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
 
       <Field label={t.fieldAmount}>
         <AmountInput name="amount" required />

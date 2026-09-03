@@ -1,5 +1,6 @@
 import { Field, Input, Select } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
+import { Toggle } from "@/components/ui/toggle";
 import { getAccountTypeLabels } from "@/lib/account-icons";
 import type { AccountType } from "@/lib/supabase/database.types";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
@@ -14,6 +15,7 @@ export function AccountFormFields({
     type?: string;
     provider?: string | null;
     balance?: number;
+    include_in_total_balance?: boolean;
   };
 }) {
   const labels = getAccountTypeLabels(t);
@@ -49,6 +51,12 @@ export function AccountFormFields({
           <AmountInput name="balance" defaultValue={defaultValues.balance} />
         </Field>
       )}
+      <Toggle
+        name="include_in_total_balance"
+        defaultChecked={defaultValues?.include_in_total_balance ?? true}
+        label={t.fieldIncludeInTotal}
+        hint={t.fieldIncludeInTotalHint}
+      />
     </>
   );
 }

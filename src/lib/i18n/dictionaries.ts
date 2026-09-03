@@ -81,8 +81,11 @@ const id = {
   fieldInitialBalance: "Saldo awal",
   fieldCurrentBalance: "Saldo saat ini",
   fieldCurrentBalanceHint: "Mengubah ini langsung menyesuaikan saldo, tanpa membuat transaksi baru.",
+  fieldIncludeInTotal: "Masuk hitungan Total Balance",
+  fieldIncludeInTotalHint: "Matikan buat account yang gak mau ikut dihitung, misalnya utang atau investasi.",
   archiveAccount: "Arsipkan account ini",
   inactive: "nonaktif",
+  excludedFromTotal: "gak masuk total",
   accountTypeCash: "Tunai",
   accountTypeBank: "Bank",
   accountTypeEwallet: "E-wallet",
@@ -109,10 +112,12 @@ const id = {
 
   // Transfer
   transferTitle: "Transfer",
+  editTransferTitle: "Edit transfer",
   needAccountBeforeTransfer: "Buat account dulu sebelum transfer.",
   fieldFromAccount: "Dari account",
   fieldToAccount: "Ke account",
   sendTransfer: "Kirim transfer",
+  deleteTransfer: "Hapus transfer ini",
   personalSuffix: "(personal)",
 
   // Categories
@@ -149,6 +154,10 @@ const id = {
   archivePot: "Arsipkan pot ini",
   potAllocateTitle: "Alokasikan",
   potAllocateDescription: "Isi jumlah buat pot yang mau ditambah — kosongkan yang lain.",
+  fieldMonthlyBudget: "Dana bulanan",
+  fieldMonthlyBudgetHint: "Total dana yang mau dialokasikan bulan ini — kosongkan buat matikan.",
+  potAllocatedThisMonth: "Sudah dialokasikan bulan ini",
+  potRemainingBudget: "Sisa",
   potTransferTitle: "Pindah antar pot",
   potTransferSamePot: "Pot asal dan tujuan gak boleh sama.",
   fieldFromPot: "Dari pot",
@@ -314,8 +323,11 @@ const en: typeof id = {
   fieldInitialBalance: "Initial balance",
   fieldCurrentBalance: "Current balance",
   fieldCurrentBalanceHint: "Changing this adjusts the balance directly, without creating a new transaction.",
+  fieldIncludeInTotal: "Count toward Total Balance",
+  fieldIncludeInTotalHint: "Turn off for accounts you don't want counted, like debt or investments.",
   archiveAccount: "Archive this account",
   inactive: "inactive",
+  excludedFromTotal: "excluded from total",
   accountTypeCash: "Cash",
   accountTypeBank: "Bank",
   accountTypeEwallet: "E-wallet",
@@ -342,10 +354,12 @@ const en: typeof id = {
 
   // Transfer
   transferTitle: "Transfer",
+  editTransferTitle: "Edit transfer",
   needAccountBeforeTransfer: "Create an account first before transferring.",
   fieldFromAccount: "From account",
   fieldToAccount: "To account",
   sendTransfer: "Send transfer",
+  deleteTransfer: "Delete this transfer",
   personalSuffix: "(personal)",
 
   // Categories
@@ -382,6 +396,10 @@ const en: typeof id = {
   archivePot: "Archive this pot",
   potAllocateTitle: "Allocate",
   potAllocateDescription: "Fill in an amount for each pot you want to top up — leave the rest blank.",
+  fieldMonthlyBudget: "Monthly budget",
+  fieldMonthlyBudgetHint: "Total funds you plan to allocate this month — leave blank to turn off.",
+  potAllocatedThisMonth: "Allocated this month",
+  potRemainingBudget: "Remaining",
   potTransferTitle: "Move between pots",
   potTransferSamePot: "The source and destination pot can't be the same.",
   fieldFromPot: "From pot",

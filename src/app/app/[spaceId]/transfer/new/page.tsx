@@ -19,7 +19,7 @@ export default async function NewTransferPage({
   const { error } = await searchParams;
   const supabase = await createClient();
 
-  const [{ data: fromAccounts }, targets] = await Promise.all([
+  const [{ data: fromAccounts }, targets, { data: pots }] = await Promise.all([
     supabase
       .from("accounts")
       .select("id, name")
@@ -27,6 +27,7 @@ export default async function NewTransferPage({
       .is("deleted_at", null)
       .eq("is_active", true),
     getTransferTargets(spaceId),
+    supabase.from("pots").select("id, name").eq("space_id", spaceId).is("deleted_at", null).order("created_at"),
   ]);
 
   const t = await getDictionary();
@@ -40,6 +41,7 @@ export default async function NewTransferPage({
         amount: Number(formData.get("amount")),
         transferDate: String(formData.get("transfer_date")),
         note: String(formData.get("note") || "") || null,
+        potId: String(formData.get("pot_id") || "") || null,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Transfer failed";
@@ -60,7 +62,7 @@ export default async function NewTransferPage({
         {!fromAccounts?.length ? (
           <p className="text-base text-foreground-muted">{t.needAccountBeforeTransfer}</p>
         ) : (
-          <TransferForm action={transfer} fromAccounts={fromAccounts} targets={targets} />
+          <TransferForm action={transfer} fromAccounts={fromAccounts} targets={targets} pots={pots ?? []} />
         )}
       </Card>
     </div>

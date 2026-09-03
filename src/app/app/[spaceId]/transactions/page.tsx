@@ -17,13 +17,28 @@ export default async function TransactionsPage({
   const { spaceId } = await params;
   const supabase = await createClient();
 
-  const { data: transactions } = await supabase
-    .from("transactions")
-    .select("id, type, amount, note, transaction_date, categories(name), accounts(name)")
-    .eq("space_id", spaceId)
-    .is("deleted_at", null)
-    .order("transaction_date", { ascending: false })
-    .limit(100);
+  const [{ data: transactions }, { data: transfers }] = await Promise.all([
+    supabase
+      .from("transactions")
+      .select("id, type, amount, note, transaction_date, categories(name), accounts(name)")
+      .eq("space_id", spaceId)
+      .is("deleted_at", null)
+      .order("transaction_date", { ascending: false })
+      .limit(100),
+    supabase
+      .from("transfers")
+      .select("id, out_transaction_id, in_transaction_id")
+      .or(`from_space_id.eq.${spaceId},to_space_id.eq.${spaceId}`)
+      .is("deleted_at", null),
+  ]);
+
+  // Each transfer leg is its own transaction row, so map both legs back to
+  // the transfers row that groups them, for the edit link below.
+  const transferIdByTransactionId = new Map<string, string>();
+  for (const transfer of transfers ?? []) {
+    transferIdByTransactionId.set(transfer.out_transaction_id, transfer.id);
+    transferIdByTransactionId.set(transfer.in_transaction_id, transfer.id);
+  }
 
   const t = await getDictionary();
 
@@ -42,7 +57,13 @@ export default async function TransactionsPage({
         <Card className="divide-y divide-border p-0">
           {transactions.map((tx) => {
             const isInflow = tx.type === "income" || tx.type === "transfer_in";
-            const isEditable = tx.type === "income" || tx.type === "expense";
+            const isTransfer = tx.type === "transfer_in" || tx.type === "transfer_out";
+            const editHref =
+              tx.type === "income" || tx.type === "expense"
+                ? `/app/${spaceId}/transactions/${tx.id}/edit`
+                : isTransfer && transferIdByTransactionId.has(tx.id)
+                  ? `/app/${spaceId}/transfer/${transferIdByTransactionId.get(tx.id)}/edit`
+                  : null;
             const Row = (
               <div className="flex items-center gap-3 px-5 py-4">
                 <span
@@ -67,8 +88,8 @@ export default async function TransactionsPage({
                 </p>
               </div>
             );
-            return isEditable ? (
-              <Link key={tx.id} href={`/app/${spaceId}/transactions/${tx.id}/edit`} className="block hover:bg-surface-muted">
+            return editHref ? (
+              <Link key={tx.id} href={editHref} className="block hover:bg-surface-muted">
                 {Row}
               </Link>
             ) : (

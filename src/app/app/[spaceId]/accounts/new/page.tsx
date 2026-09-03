@@ -31,6 +31,7 @@ export default async function NewAccountPage({
       type: String(formData.get("type")) as AccountType,
       provider: String(formData.get("provider") || "") || null,
       initial_balance: Number(formData.get("initial_balance") || 0),
+      include_in_total_balance: formData.get("include_in_total_balance") === "true",
       created_by: user.id,
     });
 
