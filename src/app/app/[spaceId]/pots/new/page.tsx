@@ -32,12 +32,12 @@ export default async function NewPotPage({
 
     if (error) redirect(`/app/${spaceId}/pots/new?error=${encodeURIComponent(error.message)}`);
     revalidatePath("/app", "layout");
-    redirect(`/app/${spaceId}/pots`);
+    redirect(`/app/${spaceId}/accounts?view=pots`);
   }
 
   return (
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
-      <BackLink href={`/app/${spaceId}/pots`} label={t.back} />
+      <BackLink href={`/app/${spaceId}/accounts?view=pots`} label={t.back} />
       <PageHeader title={t.newPotTitle} />
       <Card>
         <form action={create} className="flex flex-col gap-4">

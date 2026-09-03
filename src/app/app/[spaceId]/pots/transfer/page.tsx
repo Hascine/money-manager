@@ -55,12 +55,12 @@ export default async function TransferPotsPage({
 
     if (error) redirect(`/app/${spaceId}/pots/transfer?error=${encodeURIComponent(error.message)}`);
     revalidatePath("/app", "layout");
-    redirect(`/app/${spaceId}/pots`);
+    redirect(`/app/${spaceId}/accounts?view=pots`);
   }
 
   return (
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
-      <BackLink href={`/app/${spaceId}/pots`} label={t.back} />
+      <BackLink href={`/app/${spaceId}/accounts?view=pots`} label={t.back} />
       <PageHeader title={t.potTransferTitle} />
       {error && (
         <p className="rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger">{error}</p>

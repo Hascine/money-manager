@@ -54,12 +54,12 @@ export default async function AllocatePotsPage({
     }
 
     revalidatePath("/app", "layout");
-    redirect(`/app/${spaceId}/pots`);
+    redirect(`/app/${spaceId}/accounts?view=pots`);
   }
 
   return (
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
-      <BackLink href={`/app/${spaceId}/pots`} label={t.back} />
+      <BackLink href={`/app/${spaceId}/accounts?view=pots`} label={t.back} />
       <PageHeader title={t.potAllocateTitle} description={t.potAllocateDescription} />
       {pots?.length ? (
         <Card>
