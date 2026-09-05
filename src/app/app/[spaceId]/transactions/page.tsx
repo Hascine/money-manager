@@ -2,34 +2,56 @@ import Link from "next/link";
 import { Plus, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { formatIDR } from "@/lib/format";
-import { getDictionary } from "@/lib/i18n/get-language";
+import { formatPeriodLabel, type Period } from "@/lib/period";
+import { getDictionary, getLanguage } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button";
+import { BackLink } from "@/components/ui/back-link";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Receipt } from "lucide-react";
 
+const PERIODS: Period[] = ["day", "week", "month", "year"];
+
 export default async function TransactionsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ spaceId: string }>;
+  searchParams: Promise<{ type?: string; category?: string; period?: string; start?: string; end?: string }>;
 }) {
   const { spaceId } = await params;
+  const { type, category, period, start, end } = await searchParams;
   const supabase = await createClient();
 
-  const [{ data: transactions }, { data: transfers }] = await Promise.all([
-    supabase
-      .from("transactions")
-      .select("id, type, amount, note, transaction_date, categories(name), accounts(name)")
-      .eq("space_id", spaceId)
-      .is("deleted_at", null)
-      .order("transaction_date", { ascending: false })
-      .limit(100),
+  const isFiltered = Boolean(type || category || start || end);
+
+  let query = supabase
+    .from("transactions")
+    .select("id, type, amount, note, transaction_date, categories(name), accounts(name)")
+    .eq("space_id", spaceId)
+    .is("deleted_at", null);
+
+  if (type === "income" || type === "expense") query = query.eq("type", type);
+  if (category === "uncategorized") query = query.is("category_id", null);
+  else if (category) query = query.eq("category_id", category);
+  if (start) query = query.gte("transaction_date", start);
+  if (end) query = query.lte("transaction_date", end);
+  query = query.order("transaction_date", { ascending: false });
+  if (!isFiltered) query = query.limit(100);
+
+  const [{ data: transactions }, { data: transfers }, { data: categoryRow }, t, lang] = await Promise.all([
+    query,
     supabase
       .from("transfers")
       .select("id, out_transaction_id, in_transaction_id")
       .or(`from_space_id.eq.${spaceId},to_space_id.eq.${spaceId}`)
       .is("deleted_at", null),
+    category && category !== "uncategorized"
+      ? supabase.from("categories").select("name").eq("id", category).maybeSingle()
+      : Promise.resolve({ data: null }),
+    getDictionary(),
+    getLanguage(),
   ]);
 
   // Each transfer leg is its own transaction row, so map both legs back to
@@ -40,12 +62,18 @@ export default async function TransactionsPage({
     transferIdByTransactionId.set(transfer.in_transaction_id, transfer.id);
   }
 
-  const t = await getDictionary();
+  const filterTitle = category === "uncategorized" ? t.reportsUncategorized : (categoryRow?.name ?? t.transactionsTitle);
+  const filterDescription =
+    isFiltered && period && start && end
+      ? formatPeriodLabel(PERIODS.includes(period as Period) ? (period as Period) : "month", start, end, lang)
+      : undefined;
 
   return (
     <div className="flex flex-col gap-4">
+      {isFiltered && <BackLink href={`/app/${spaceId}/reports`} label={t.back} />}
       <PageHeader
-        title={t.transactionsTitle}
+        title={isFiltered ? filterTitle : t.transactionsTitle}
+        description={filterDescription}
         action={
           <ButtonLink href={`/app/${spaceId}/transactions/new`} size="md">
             <Plus size={18} />

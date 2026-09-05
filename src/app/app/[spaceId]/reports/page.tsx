@@ -15,15 +15,20 @@ import { cn } from "@/lib/cn";
 const PERIODS: Period[] = ["day", "week", "month", "year"];
 
 function groupByCategory(
-  rows: { amount: number; categories: { name: string } | null }[],
-  uncategorizedLabel: string
+  rows: { amount: number; category_id: string | null; categories: { name: string } | null }[],
+  uncategorizedLabel: string,
+  hrefFor: (categoryKey: string) => string
 ): CategoryAmount[] {
-  const totals = new Map<string, number>();
+  const totals = new Map<string, { name: string; amount: number }>();
   for (const row of rows) {
+    const key = row.category_id ?? "uncategorized";
     const name = row.categories?.name ?? uncategorizedLabel;
-    totals.set(name, (totals.get(name) ?? 0) + row.amount);
+    const existing = totals.get(key);
+    totals.set(key, { name, amount: (existing?.amount ?? 0) + row.amount });
   }
-  return [...totals.entries()].map(([name, amount]) => ({ name, amount })).sort((a, b) => b.amount - a.amount);
+  return [...totals.entries()]
+    .map(([key, { name, amount }]) => ({ name, amount, href: hrefFor(key) }))
+    .sort((a, b) => b.amount - a.amount);
 }
 
 export default async function ReportsPage({
@@ -46,7 +51,7 @@ export default async function ReportsPage({
   const [{ data: transactions }, expenseTransfers] = await Promise.all([
     supabase
       .from("transactions")
-      .select("type, amount, categories(name)")
+      .select("type, amount, category_id, categories(name)")
       .eq("space_id", spaceId)
       .is("deleted_at", null)
       .in("type", ["income", "expense"])
@@ -55,13 +60,17 @@ export default async function ReportsPage({
     getExpenseTransfers(spaceId, range.start, range.end),
   ]);
 
+  function transactionsHref(type: "income" | "expense", categoryKey: string) {
+    return `/app/${spaceId}/transactions?type=${type}&category=${categoryKey}&period=${period}&start=${range.start}&end=${range.end}`;
+  }
+
   const incomeRows = (transactions ?? []).filter((r) => r.type === "income");
   const expenseRows = (transactions ?? []).filter((r) => r.type === "expense");
   const totalIncome = incomeRows.reduce((sum, r) => sum + r.amount, 0);
   const transfersAsExpense = expenseTransfers.reduce((sum, r) => sum + r.amount, 0);
   const totalExpense = expenseRows.reduce((sum, r) => sum + r.amount, 0) + transfersAsExpense;
-  const incomeByCategory = groupByCategory(incomeRows, t.reportsUncategorized);
-  const expenseByCategory = groupByCategory(expenseRows, t.reportsUncategorized);
+  const incomeByCategory = groupByCategory(incomeRows, t.reportsUncategorized, (key) => transactionsHref("income", key));
+  const expenseByCategory = groupByCategory(expenseRows, t.reportsUncategorized, (key) => transactionsHref("expense", key));
   if (transfersAsExpense > 0) {
     expenseByCategory.push({ name: t.reportsTransfers, amount: transfersAsExpense });
     expenseByCategory.sort((a, b) => b.amount - a.amount);
