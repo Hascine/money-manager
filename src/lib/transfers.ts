@@ -19,6 +19,7 @@ export async function createTransfer(input: {
   transferDate: string;
   note?: string | null;
   potId?: string | null;
+  countedAsExpense?: boolean;
 }) {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("create_transfer", {
@@ -28,6 +29,7 @@ export async function createTransfer(input: {
     p_transfer_date: input.transferDate,
     p_note: input.note ?? null,
     p_pot_id: input.potId ?? null,
+    p_counted_as_expense: input.countedAsExpense ?? false,
   });
   if (error) throw error;
   return data;
@@ -39,6 +41,7 @@ export async function updateTransfer(input: {
   transferDate: string;
   note?: string | null;
   potId?: string | null;
+  countedAsExpense?: boolean;
 }) {
   const supabase = await createClient();
   const { error } = await supabase.rpc("update_transfer", {
@@ -47,8 +50,26 @@ export async function updateTransfer(input: {
     p_transfer_date: input.transferDate,
     p_note: input.note ?? null,
     p_pot_id: input.potId ?? null,
+    p_counted_as_expense: input.countedAsExpense ?? false,
   });
   if (error) throw error;
+}
+
+/** Transfers flagged to count toward the *source* space's expense reports —
+ * e.g. sending money to a co-member's personal wallet is often a real
+ * expense for the family space, even though it's an internal transfer
+ * everywhere else in the app. */
+export async function getExpenseTransfers(spaceId: string, start: string, end: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("transfers")
+    .select("amount")
+    .eq("from_space_id", spaceId)
+    .eq("counted_as_expense", true)
+    .is("deleted_at", null)
+    .gte("transfer_date", start)
+    .lte("transfer_date", end);
+  return data ?? [];
 }
 
 export async function deleteTransfer(transferId: string) {
@@ -65,7 +86,7 @@ export async function getTransfer(transferId: string) {
   const { data, error } = await supabase
     .from("transfers")
     .select(
-      "id, amount, transfer_date, note, from_space_id, out_transaction_id, from_account:accounts!from_account_id(name), to_account:accounts!to_account_id(name)"
+      "id, amount, transfer_date, note, from_space_id, out_transaction_id, counted_as_expense, from_account:accounts!from_account_id(name), to_account:accounts!to_account_id(name)"
     )
     .eq("id", transferId)
     .is("deleted_at", null)

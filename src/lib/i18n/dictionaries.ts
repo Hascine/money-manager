@@ -118,6 +118,8 @@ const id = {
   fieldToAccount: "Ke account",
   sendTransfer: "Kirim transfer",
   deleteTransfer: "Hapus transfer ini",
+  fieldCountedAsExpense: "Catat sebagai pengeluaran",
+  fieldCountedAsExpenseHint: "Berguna kalau transfer ini ke space lain, misalnya kasih uang ke anggota keluarga.",
   personalSuffix: "(personal)",
 
   // Categories
@@ -143,6 +145,7 @@ const id = {
   reportsExpenseByCategory: "Pengeluaran per kategori",
   reportsIncomeByCategory: "Pemasukan per kategori",
   reportsUncategorized: "Tanpa kategori",
+  reportsTransfers: "Transfer",
   emptyReportsTitle: "Belum ada transaksi",
   emptyReportsDescription: "Gak ada pemasukan atau pengeluaran tercatat di periode ini.",
 
@@ -361,6 +364,8 @@ const en: typeof id = {
   fieldToAccount: "To account",
   sendTransfer: "Send transfer",
   deleteTransfer: "Delete this transfer",
+  fieldCountedAsExpense: "Record as an expense",
+  fieldCountedAsExpenseHint: "Useful when this transfer goes to another space, like giving money to a family member.",
   personalSuffix: "(personal)",
 
   // Categories
@@ -386,6 +391,7 @@ const en: typeof id = {
   reportsExpenseByCategory: "Expense by category",
   reportsIncomeByCategory: "Income by category",
   reportsUncategorized: "Uncategorized",
+  reportsTransfers: "Transfers",
   emptyReportsTitle: "No transactions yet",
   emptyReportsDescription: "No income or expense recorded for this period.",
 

@@ -5,6 +5,7 @@ import { getAccountBalances } from "@/lib/balances";
 import { formatIDR } from "@/lib/format";
 import { ACCOUNT_TYPE_ICON } from "@/lib/account-icons";
 import { getPeriodRange, formatPeriodLabel, todayISO } from "@/lib/period";
+import { getExpenseTransfers } from "@/lib/transfers";
 import { getDictionary, getLanguage } from "@/lib/i18n/get-language";
 import { Card } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button";
@@ -20,7 +21,7 @@ export default async function SpaceDashboardPage({
   const supabase = await createClient();
   const thisMonth = getPeriodRange("month", todayISO());
 
-  const [{ data: totalBalance }, { data: accounts }, { data: transactions }, balances, { data: monthTx }] =
+  const [{ data: totalBalance }, { data: accounts }, { data: transactions }, balances, { data: monthTx }, expenseTransfers] =
     await Promise.all([
       supabase.from("space_balances").select("total_balance").eq("space_id", spaceId).maybeSingle(),
       supabase
@@ -45,11 +46,14 @@ export default async function SpaceDashboardPage({
         .in("type", ["income", "expense"])
         .gte("transaction_date", thisMonth.start)
         .lte("transaction_date", thisMonth.end),
+      getExpenseTransfers(spaceId, thisMonth.start, thisMonth.end),
     ]);
 
   const [t, lang] = await Promise.all([getDictionary(), getLanguage()]);
   const monthIncome = (monthTx ?? []).filter((r) => r.type === "income").reduce((s, r) => s + r.amount, 0);
-  const monthExpense = (monthTx ?? []).filter((r) => r.type === "expense").reduce((s, r) => s + r.amount, 0);
+  const monthExpense =
+    (monthTx ?? []).filter((r) => r.type === "expense").reduce((s, r) => s + r.amount, 0) +
+    expenseTransfers.reduce((s, r) => s + r.amount, 0);
   const monthLabel = formatPeriodLabel("month", thisMonth.start, thisMonth.end, lang);
 
   return (

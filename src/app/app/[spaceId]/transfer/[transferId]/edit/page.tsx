@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
+import { Toggle } from "@/components/ui/toggle";
 import { Button } from "@/components/ui/button";
 import { BackLink } from "@/components/ui/back-link";
 
@@ -39,6 +40,7 @@ export default async function EditTransferPage({
         transferDate: String(formData.get("transfer_date")),
         note: String(formData.get("note") || "") || null,
         potId: String(formData.get("pot_id") || "") || null,
+        countedAsExpense: formData.get("counted_as_expense") === "true",
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Update failed";
@@ -91,6 +93,12 @@ export default async function EditTransferPage({
           <Field label={t.fieldNote}>
             <Input name="note" defaultValue={transfer.note ?? ""} />
           </Field>
+          <Toggle
+            name="counted_as_expense"
+            defaultChecked={transfer.counted_as_expense}
+            label={t.fieldCountedAsExpense}
+            hint={t.fieldCountedAsExpenseHint}
+          />
           <Button type="submit" size="lg" className="mt-2 w-full">
             {t.save}
           </Button>

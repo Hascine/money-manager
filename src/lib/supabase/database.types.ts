@@ -290,6 +290,7 @@ export interface Database {
           amount: number;
           transfer_date: string;
           note: string | null;
+          counted_as_expense: boolean;
           created_by: string;
           created_at: string;
           updated_at: string;
@@ -426,6 +427,7 @@ export interface Database {
           p_transfer_date: string;
           p_note?: string | null;
           p_pot_id?: string | null;
+          p_counted_as_expense?: boolean;
         };
         Returns: string;
       };
@@ -436,6 +438,7 @@ export interface Database {
           p_transfer_date: string;
           p_note?: string | null;
           p_pot_id?: string | null;
+          p_counted_as_expense?: boolean;
         };
         Returns: undefined;
       };

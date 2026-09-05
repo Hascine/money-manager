@@ -42,6 +42,7 @@ export default async function NewTransferPage({
         transferDate: String(formData.get("transfer_date")),
         note: String(formData.get("note") || "") || null,
         potId: String(formData.get("pot_id") || "") || null,
+        countedAsExpense: formData.get("counted_as_expense") === "true",
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Transfer failed";

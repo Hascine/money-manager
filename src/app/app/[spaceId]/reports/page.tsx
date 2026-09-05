@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getDictionary, getLanguage } from "@/lib/i18n/get-language";
 import { formatIDR } from "@/lib/format";
 import { getPeriodRange, formatPeriodLabel, todayISO, type Period } from "@/lib/period";
+import { getExpenseTransfers } from "@/lib/transfers";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { BackLink } from "@/components/ui/back-link";
@@ -42,21 +43,29 @@ export default async function ReportsPage({
   const [lang, t, supabase] = await Promise.all([getLanguage(), getDictionary(), createClient()]);
   const label = formatPeriodLabel(period, range.start, range.end, lang);
 
-  const { data: transactions } = await supabase
-    .from("transactions")
-    .select("type, amount, categories(name)")
-    .eq("space_id", spaceId)
-    .is("deleted_at", null)
-    .in("type", ["income", "expense"])
-    .gte("transaction_date", range.start)
-    .lte("transaction_date", range.end);
+  const [{ data: transactions }, expenseTransfers] = await Promise.all([
+    supabase
+      .from("transactions")
+      .select("type, amount, categories(name)")
+      .eq("space_id", spaceId)
+      .is("deleted_at", null)
+      .in("type", ["income", "expense"])
+      .gte("transaction_date", range.start)
+      .lte("transaction_date", range.end),
+    getExpenseTransfers(spaceId, range.start, range.end),
+  ]);
 
   const incomeRows = (transactions ?? []).filter((r) => r.type === "income");
   const expenseRows = (transactions ?? []).filter((r) => r.type === "expense");
   const totalIncome = incomeRows.reduce((sum, r) => sum + r.amount, 0);
-  const totalExpense = expenseRows.reduce((sum, r) => sum + r.amount, 0);
+  const transfersAsExpense = expenseTransfers.reduce((sum, r) => sum + r.amount, 0);
+  const totalExpense = expenseRows.reduce((sum, r) => sum + r.amount, 0) + transfersAsExpense;
   const incomeByCategory = groupByCategory(incomeRows, t.reportsUncategorized);
   const expenseByCategory = groupByCategory(expenseRows, t.reportsUncategorized);
+  if (transfersAsExpense > 0) {
+    expenseByCategory.push({ name: t.reportsTransfers, amount: transfersAsExpense });
+    expenseByCategory.sort((a, b) => b.amount - a.amount);
+  }
   const net = totalIncome - totalExpense;
 
   return (
