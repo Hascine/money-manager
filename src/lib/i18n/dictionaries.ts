@@ -124,6 +124,8 @@ const id = {
   categoriesTitle: "Kategori",
   newCategory: "Baru",
   newCategoryTitle: "Kategori baru",
+  editCategoryTitle: "Edit kategori",
+  deleteCategory: "Hapus kategori ini",
   incomeSection: "Pemasukan",
   expenseSection: "Pengeluaran",
 
@@ -365,6 +367,8 @@ const en: typeof id = {
   categoriesTitle: "Categories",
   newCategory: "New",
   newCategoryTitle: "New category",
+  editCategoryTitle: "Edit category",
+  deleteCategory: "Delete this category",
   incomeSection: "Income",
   expenseSection: "Expense",
 

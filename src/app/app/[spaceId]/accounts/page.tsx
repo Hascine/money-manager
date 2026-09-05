@@ -123,12 +123,17 @@ export default async function AccountsPage({
       supabase.from("pots").select("id, name").eq("space_id", spaceId).is("deleted_at", null).order("created_at"),
       getPotBalances(spaceId),
       supabase.from("spaces").select("monthly_pot_budget").eq("id", spaceId).single(),
+      // pots!inner + the deleted_at filter excludes allocations that belong
+      // to a since-archived pot — otherwise a deleted pot's old allocations
+      // kept counting against this month's budget forever, dragging
+      // "remaining" negative for money that's no longer tied to any pot.
       supabase
         .from("pot_entries")
-        .select("amount")
+        .select("amount, pots!inner(deleted_at)")
         .eq("space_id", spaceId)
         .eq("type", "allocation")
         .is("deleted_at", null)
+        .is("pots.deleted_at", null)
         .gte("entry_date", thisMonth.start)
         .lte("entry_date", thisMonth.end),
     ]);

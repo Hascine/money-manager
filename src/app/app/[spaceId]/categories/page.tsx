@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary } from "@/lib/i18n/get-language";
@@ -39,12 +40,13 @@ export default async function CategoriesPage({
         <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.incomeSection}</h3>
         <div className="flex flex-wrap gap-2">
           {income.map((c) => (
-            <span
+            <Link
               key={c.id}
-              className="rounded-full border border-border bg-success/10 px-4 py-2 text-sm font-medium text-success"
+              href={`/app/${spaceId}/categories/${c.id}/edit`}
+              className="rounded-full border border-border bg-success/10 px-4 py-2 text-sm font-medium text-success hover:brightness-95"
             >
               {c.name}
-            </span>
+            </Link>
           ))}
         </div>
       </div>
@@ -52,12 +54,13 @@ export default async function CategoriesPage({
         <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.expenseSection}</h3>
         <div className="flex flex-wrap gap-2">
           {expense.map((c) => (
-            <span
+            <Link
               key={c.id}
-              className="rounded-full border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-foreground"
+              href={`/app/${spaceId}/categories/${c.id}/edit`}
+              className="rounded-full border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-border/60"
             >
               {c.name}
-            </span>
+            </Link>
           ))}
         </div>
       </div>
