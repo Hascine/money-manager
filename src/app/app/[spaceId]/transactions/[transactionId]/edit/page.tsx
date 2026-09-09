@@ -40,6 +40,7 @@ export default async function EditTransactionPage({
     const { error } = await supabase
       .from("transactions")
       .update({
+        account_id: String(formData.get("account_id")),
         category_id: categoryId || null,
         pot_id: potId || null,
         amount: Number(formData.get("amount")),

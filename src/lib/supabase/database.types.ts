@@ -247,6 +247,7 @@ export interface Database {
           note?: string | null;
         };
         Update: {
+          account_id?: string;
           category_id?: string | null;
           pot_id?: string | null;
           amount?: number;
