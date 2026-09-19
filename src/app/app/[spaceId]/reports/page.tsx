@@ -77,6 +77,15 @@ export default async function ReportsPage({
   }
   const net = totalIncome - totalExpense;
 
+  // Share of the section's own total — distinct from each bar's width, which
+  // is sized against the largest entry instead (see CategoryBreakdown).
+  for (const entry of incomeByCategory) {
+    entry.sharePct = totalIncome > 0 ? Math.round((entry.amount / totalIncome) * 100) : 0;
+  }
+  for (const entry of expenseByCategory) {
+    entry.sharePct = totalExpense > 0 ? Math.round((entry.amount / totalExpense) * 100) : 0;
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
       <BackLink href={`/app/${spaceId}/more`} label={t.back} />

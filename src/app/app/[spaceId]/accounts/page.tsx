@@ -14,6 +14,7 @@ import { Field } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { CategoryBreakdown } from "@/components/category-breakdown";
 import { Wallet } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -207,17 +208,17 @@ export default async function AccountsPage({
         ) : null}
 
         {pots?.length ? (
-          <Card className="divide-y divide-border p-0">
-            {pots.map((pot) => (
-              <Link
-                key={pot.id}
-                href={`/app/${spaceId}/pots/${pot.id}/edit`}
-                className="flex items-center justify-between gap-3 px-5 py-4 hover:bg-surface-muted"
-              >
-                <p className="font-medium text-foreground">{pot.name}</p>
-                <p className="font-semibold text-foreground">{formatIDR(balances.get(pot.id) ?? 0)}</p>
-              </Link>
-            ))}
+          <Card>
+            <CategoryBreakdown
+              tone="success"
+              entries={[...pots]
+                .map((pot) => ({
+                  name: pot.name,
+                  amount: balances.get(pot.id) ?? 0,
+                  href: `/app/${spaceId}/pots/${pot.id}/edit`,
+                }))
+                .sort((a, b) => b.amount - a.amount)}
+            />
           </Card>
         ) : (
           <EmptyState icon={PiggyBank} title={t.emptyPotsTitle} description={t.emptyPotsDescription} />
