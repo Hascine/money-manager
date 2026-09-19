@@ -109,6 +109,8 @@ const id = {
   save: "Simpan",
   deleteTransaction: "Hapus transaksi ini",
   needAccountFirst: "Buat account dulu sebelum mencatat transaksi.",
+  exportFiltered: "Export tampilan ini",
+  exportAll: "Export semua",
 
   // Transfer
   transferTitle: "Transfer",
@@ -355,6 +357,8 @@ const en: typeof id = {
   save: "Save",
   deleteTransaction: "Delete this transaction",
   needAccountFirst: "Create an account first before recording a transaction.",
+  exportFiltered: "Export this view",
+  exportAll: "Export all",
 
   // Transfer
   transferTitle: "Transfer",

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { Plus, ArrowDownLeft, ArrowUpRight, Download } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { formatIDR } from "@/lib/format";
 import { formatPeriodLabel, type Period } from "@/lib/period";
@@ -68,6 +68,16 @@ export default async function TransactionsPage({
       ? formatPeriodLabel(PERIODS.includes(period as Period) ? (period as Period) : "month", start, end, lang)
       : undefined;
 
+  const filteredExportHref = (() => {
+    const qs = new URLSearchParams();
+    if (type) qs.set("type", type);
+    if (category) qs.set("category", category);
+    if (start) qs.set("start", start);
+    if (end) qs.set("end", end);
+    qs.set("scope", "filtered");
+    return `/app/${spaceId}/transactions/export?${qs.toString()}`;
+  })();
+
   return (
     <div className="flex flex-col gap-4">
       {isFiltered && <BackLink href={`/app/${spaceId}/reports`} label={t.back} />}
@@ -81,6 +91,26 @@ export default async function TransactionsPage({
           </ButtonLink>
         }
       />
+
+      <div className="flex gap-2">
+        {isFiltered && (
+          <a
+            href={filteredExportHref}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-muted"
+          >
+            <Download size={16} />
+            {t.exportFiltered}
+          </a>
+        )}
+        <a
+          href={`/app/${spaceId}/transactions/export?scope=all`}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-muted"
+        >
+          <Download size={16} />
+          {t.exportAll}
+        </a>
+      </div>
+
       {transactions?.length ? (
         <Card className="divide-y divide-border p-0">
           {transactions.map((tx) => {
