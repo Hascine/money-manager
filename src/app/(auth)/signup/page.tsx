@@ -3,7 +3,8 @@ import { signup } from "../actions";
 import { getDictionary } from "@/lib/i18n/get-language";
 import { Card } from "@/components/ui/card";
 import { Field, Input } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
 import { LogoMark } from "@/components/logo";
 
 export default async function SignupPage({
@@ -38,9 +39,9 @@ export default async function SignupPage({
           <Field label={t.fieldPassword} hint={t.fieldPasswordHint}>
             <Input name="password" type="password" required minLength={6} placeholder="••••••••" />
           </Field>
-          <Button type="submit" size="lg" className="mt-2 w-full">
+          <SubmitButton size="lg" className="mt-2 w-full">
             {t.signupSubmit}
-          </Button>
+          </SubmitButton>
           <p className="text-center text-base text-foreground-muted">
             {t.signupHaveAccount}{" "}
             <Link href={loginHref} className="font-semibold text-foreground underline underline-offset-4">

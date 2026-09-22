@@ -5,7 +5,8 @@ import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
 import { BackLink } from "@/components/ui/back-link";
 import type { CategoryType } from "@/lib/supabase/database.types";
 
@@ -46,9 +47,9 @@ export default async function NewCategoryPage({
               <option value="income">{t.typeIncome}</option>
             </Select>
           </Field>
-          <Button type="submit" size="lg" className="mt-2 w-full">
+          <SubmitButton size="lg" className="mt-2 w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
     </div>

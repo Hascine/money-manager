@@ -7,7 +7,9 @@ import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field, Input } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { BackLink } from "@/components/ui/back-link";
 
 export default async function SpaceSettingsPage({
@@ -54,9 +56,9 @@ export default async function SpaceSettingsPage({
           <Field label={t.fieldSpaceName}>
             <Input name="name" defaultValue={space.name} required />
           </Field>
-          <Button type="submit" className="w-full">
+          <SubmitButton className="w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
 
@@ -77,9 +79,13 @@ export default async function SpaceSettingsPage({
 
       {space.type === "COLLABORATIVE" && (
         <form action={deleteSpace}>
-          <Button type="submit" variant="ghost" className="w-full text-danger hover:bg-danger/10">
-            {t.deleteSpace}
-          </Button>
+          <ConfirmSubmitButton
+          variant="ghost"
+          className="w-full text-danger hover:bg-danger/10"
+          confirmMessage={t.confirmDeleteSpace}
+        >
+          {t.deleteSpace}
+        </ConfirmSubmitButton>
         </form>
       )}
     </div>

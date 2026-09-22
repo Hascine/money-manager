@@ -27,7 +27,7 @@ function groupByCategory(
     totals.set(key, { name, amount: (existing?.amount ?? 0) + row.amount });
   }
   return [...totals.entries()]
-    .map(([key, { name, amount }]) => ({ name, amount, href: hrefFor(key) }))
+    .map(([key, { name, amount }]) => ({ name, amount, href: hrefFor(key), colorKey: key }))
     .sort((a, b) => b.amount - a.amount);
 }
 

@@ -67,6 +67,8 @@ const id = {
   emptyAccountsDescription: "Tambahkan account seperti bank, e-wallet, atau tunai untuk mulai mencatat.",
   addAccount: "Tambah account",
   recentTransactions: "Transaksi terbaru",
+  dashboardToday: "Hari ini",
+  thisMonthSuffix: "bulan ini",
   emptyTransactionsTitle: "Belum ada transaksi",
   emptyTransactionsDescription: "Catat pemasukan atau pengeluaran pertama Anda.",
 
@@ -101,6 +103,8 @@ const id = {
   fieldType: "Jenis",
   typeExpense: "Pengeluaran",
   typeIncome: "Pemasukan",
+  typeTransferIn: "Transfer masuk",
+  typeTransferOut: "Transfer keluar",
   fieldAccount: "Account",
   fieldCategory: "Kategori (opsional)",
   fieldAmount: "Jumlah",
@@ -126,6 +130,8 @@ const id = {
 
   // Categories
   categoriesTitle: "Kategori",
+  emptyCategoriesTitle: "Belum ada kategori",
+  emptyCategoriesDescription: "Kategori bantu kamu lihat uangnya kepakai buat apa. Bikin satu buat mulai.",
   newCategory: "Baru",
   newCategoryTitle: "Kategori baru",
   editCategoryTitle: "Edit kategori",
@@ -147,6 +153,18 @@ const id = {
   reportsExpenseByCategory: "Pengeluaran per kategori",
   reportsIncomeByCategory: "Pemasukan per kategori",
   reportsUncategorized: "Tanpa kategori",
+  dateToday: "Hari ini",
+  dateYesterday: "Kemarin",
+
+  // Konfirmasi aksi yang tidak bisa dibatalkan dari dalam app
+  confirmDeleteTransaction: "Hapus transaksi ini? Tindakan ini tidak bisa dibatalkan.",
+  confirmDeleteTransfer: "Hapus transfer ini? Catatan di kedua account ikut terhapus.",
+  confirmArchiveAccount: "Arsipkan account ini? Transaksi lamanya tetap tersimpan, tapi account-nya gak bisa dipakai lagi.",
+  confirmDeleteCategory: "Hapus kategori ini? Transaksi lama tetap aman, cuma kategorinya gak muncul lagi saat mencatat.",
+  confirmArchivePot: "Arsipkan anggaran ini? Saldonya tidak lagi dihitung.",
+  confirmDeleteSpace: "Hapus space ini beserta isinya? Semua anggota kehilangan akses.",
+  confirmRemoveMember: "Keluarkan anggota ini dari space? Dia langsung kehilangan akses.",
+  confirmRevokeInvite: "Cabut link undangan ini? Yang sudah terlanjur pakai tetap jadi anggota.",
   reportsTransfers: "Transfer",
   emptyReportsTitle: "Belum ada transaksi",
   emptyReportsDescription: "Gak ada pemasukan atau pengeluaran tercatat di periode ini.",
@@ -315,6 +333,8 @@ const en: typeof id = {
   emptyAccountsDescription: "Add an account like a bank, e-wallet, or cash to start tracking.",
   addAccount: "Add account",
   recentTransactions: "Recent transactions",
+  dashboardToday: "Today",
+  thisMonthSuffix: "this month",
   emptyTransactionsTitle: "No transactions yet",
   emptyTransactionsDescription: "Record your first income or expense.",
 
@@ -349,6 +369,8 @@ const en: typeof id = {
   fieldType: "Type",
   typeExpense: "Expense",
   typeIncome: "Income",
+  typeTransferIn: "Transfer in",
+  typeTransferOut: "Transfer out",
   fieldAccount: "Account",
   fieldCategory: "Category (optional)",
   fieldAmount: "Amount",
@@ -374,6 +396,8 @@ const en: typeof id = {
 
   // Categories
   categoriesTitle: "Categories",
+  emptyCategoriesTitle: "No categories yet",
+  emptyCategoriesDescription: "Categories show you what your money actually goes to. Create one to get started.",
   newCategory: "New",
   newCategoryTitle: "New category",
   editCategoryTitle: "Edit category",
@@ -395,6 +419,18 @@ const en: typeof id = {
   reportsExpenseByCategory: "Expense by category",
   reportsIncomeByCategory: "Income by category",
   reportsUncategorized: "Uncategorized",
+  dateToday: "Today",
+  dateYesterday: "Yesterday",
+
+  // Confirmations for actions that can't be undone from inside the app
+  confirmDeleteTransaction: "Delete this transaction? This can't be undone.",
+  confirmDeleteTransfer: "Delete this transfer? It's removed from both accounts.",
+  confirmArchiveAccount: "Archive this account? Past transactions stay, but you can't use the account anymore.",
+  confirmDeleteCategory: "Delete this category? Past transactions keep it, it just won't show up when recording new ones.",
+  confirmArchivePot: "Archive this budget? Its balance stops being counted.",
+  confirmDeleteSpace: "Delete this space and everything in it? Every member loses access.",
+  confirmRemoveMember: "Remove this member from the space? They lose access right away.",
+  confirmRevokeInvite: "Revoke this invite link? Anyone who already used it stays a member.",
   reportsTransfers: "Transfers",
   emptyReportsTitle: "No transactions yet",
   emptyReportsDescription: "No income or expense recorded for this period.",

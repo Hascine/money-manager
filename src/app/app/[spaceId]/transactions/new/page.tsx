@@ -5,7 +5,8 @@ import { getDictionary } from "@/lib/i18n/get-language";
 import { TransactionFormFields } from "@/components/transaction-form";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
 import { BackLink } from "@/components/ui/back-link";
 
 export default async function NewTransactionPage({
@@ -70,9 +71,9 @@ export default async function NewTransactionPage({
             pots={pots ?? []}
             defaultValues={{ type: defaultType }}
           />
-          <Button type="submit" size="lg" disabled={!accounts?.length} className="mt-2 w-full">
+          <SubmitButton size="lg" disabled={!accounts?.length} className="mt-2 w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
     </div>

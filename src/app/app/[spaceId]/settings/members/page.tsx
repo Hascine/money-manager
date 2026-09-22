@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { BackLink } from "@/components/ui/back-link";
 import { RoleSelect } from "@/components/role-select";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import type { MemberRole } from "@/lib/supabase/database.types";
 
 export default async function MembersPage({
@@ -71,9 +72,13 @@ export default async function MembersPage({
               </form>
               <form action={removeMember}>
                 <input type="hidden" name="member_id" value={member.id} />
-                <button type="submit" className="text-sm font-medium text-danger hover:underline">
+                <ConfirmSubmitButton
+                  unstyled
+                  confirmMessage={t.confirmRemoveMember}
+                  className="text-sm font-medium text-danger hover:underline"
+                >
                   {t.removeMember}
-                </button>
+                </ConfirmSubmitButton>
               </form>
             </div>
           </div>

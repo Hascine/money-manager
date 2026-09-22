@@ -20,6 +20,20 @@
   --warning: #f59e0b;
   --danger: #dc2626;
   --focus-ring: #0d9488;
+
+  /* Category hues. Fixed order, assigned by hash so a category keeps its
+     colour everywhere it appears. Validated for colour-blind separation and
+     surface contrast in both modes — the dark column is the same eight hues
+     re-stepped for the dark surface, not an automatic flip. Colour is never
+     the only signal: every swatch ships beside the category's icon and name. */
+  --cat-1: #2a78d6;
+  --cat-2: #eb6834;
+  --cat-3: #1baf7a;
+  --cat-4: #eda100;
+  --cat-5: #e87ba4;
+  --cat-6: #008300;
+  --cat-7: #4a3aa7;
+  --cat-8: #e34948;
 }
 
 .dark {
@@ -35,6 +49,15 @@
   --warning: #fbbf24;
   --danger: #f87171;
   --focus-ring: #2dd4bf;
+
+  --cat-1: #3987e5;
+  --cat-2: #d95926;
+  --cat-3: #199e70;
+  --cat-4: #c98500;
+  --cat-5: #d55181;
+  --cat-6: #008300;
+  --cat-7: #9085e9;
+  --cat-8: #e66767;
 }
 
 @theme inline {
@@ -78,6 +101,25 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Money figures line up column-wise instead of jittering as digits change. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Lists fade up as they arrive. Deliberately short and subtle — the
+   reduced-motion block below neutralises it entirely. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.22s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {

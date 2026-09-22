@@ -8,7 +8,9 @@ import { Card } from "@/components/ui/card";
 import { Field, Input, Select } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
 import { Toggle } from "@/components/ui/toggle";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { BackLink } from "@/components/ui/back-link";
 
 export default async function EditTransferPage({
@@ -99,15 +101,19 @@ export default async function EditTransferPage({
             label={t.fieldCountedAsExpense}
             hint={t.fieldCountedAsExpenseHint}
           />
-          <Button type="submit" size="lg" className="mt-2 w-full">
+          <SubmitButton size="lg" className="mt-2 w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
       <form action={remove}>
-        <Button type="submit" variant="ghost" className="w-full text-danger hover:bg-danger/10">
+        <ConfirmSubmitButton
+          variant="ghost"
+          className="w-full text-danger hover:bg-danger/10"
+          confirmMessage={t.confirmDeleteTransfer}
+        >
           {t.deleteTransfer}
-        </Button>
+        </ConfirmSubmitButton>
       </form>
     </div>
   );

@@ -1,9 +1,35 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Tag } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getCategoryVisual } from "@/lib/category-visuals";
 import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { ButtonLink } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+
+interface CategoryRow {
+  id: string;
+  name: string;
+  type: string;
+}
+
+function CategoryChip({ category, spaceId }: { category: CategoryRow; spaceId: string }) {
+  const visual = getCategoryVisual(category.id, category.name);
+  return (
+    <Link
+      href={`/app/${spaceId}/categories/${category.id}/edit`}
+      className="flex items-center gap-2 rounded-full border border-border bg-surface py-2 pl-2 pr-4 text-sm font-medium text-foreground transition-colors hover:bg-surface-muted"
+    >
+      <span
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+        style={{ backgroundColor: visual.tint, color: visual.color }}
+      >
+        <visual.Icon size={15} />
+      </span>
+      {category.name}
+    </Link>
+  );
+}
 
 export default async function CategoriesPage({
   params,
@@ -36,34 +62,29 @@ export default async function CategoriesPage({
           </ButtonLink>
         }
       />
-      <div>
-        <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.incomeSection}</h3>
-        <div className="flex flex-wrap gap-2">
-          {income.map((c) => (
-            <Link
-              key={c.id}
-              href={`/app/${spaceId}/categories/${c.id}/edit`}
-              className="rounded-full border border-border bg-success/10 px-4 py-2 text-sm font-medium text-success hover:brightness-95"
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-      <div>
-        <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.expenseSection}</h3>
-        <div className="flex flex-wrap gap-2">
-          {expense.map((c) => (
-            <Link
-              key={c.id}
-              href={`/app/${spaceId}/categories/${c.id}/edit`}
-              className="rounded-full border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-border/60"
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
-      </div>
+
+      {categories?.length ? (
+        <>
+          <section>
+            <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.expenseSection}</h3>
+            <div className="flex flex-wrap gap-2">
+              {expense.map((c) => (
+                <CategoryChip key={c.id} category={c} spaceId={spaceId} />
+              ))}
+            </div>
+          </section>
+          <section>
+            <h3 className="mb-2 text-sm font-semibold text-foreground-muted">{t.incomeSection}</h3>
+            <div className="flex flex-wrap gap-2">
+              {income.map((c) => (
+                <CategoryChip key={c.id} category={c} spaceId={spaceId} />
+              ))}
+            </div>
+          </section>
+        </>
+      ) : (
+        <EmptyState icon={Tag} title={t.emptyCategoriesTitle} description={t.emptyCategoriesDescription} />
+      )}
     </div>
   );
 }

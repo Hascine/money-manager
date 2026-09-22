@@ -1,15 +1,14 @@
-import Link from "next/link";
-import { Plus, ArrowDownLeft, ArrowUpRight, Download } from "lucide-react";
+import { Plus, Download, Receipt } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { formatIDR } from "@/lib/format";
-import { formatPeriodLabel, type Period } from "@/lib/period";
+import { formatPeriodLabel, todayISO, type Period } from "@/lib/period";
 import { getDictionary, getLanguage } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
+import { Amount } from "@/components/ui/amount";
 import { ButtonLink } from "@/components/ui/button";
 import { BackLink } from "@/components/ui/back-link";
 import { EmptyState } from "@/components/ui/empty-state";
-import { Receipt } from "lucide-react";
+import { TransactionRow, type TransactionRowData } from "@/components/transaction-row";
 
 const PERIODS: Period[] = ["day", "week", "month", "year"];
 
@@ -28,7 +27,7 @@ export default async function TransactionsPage({
 
   let query = supabase
     .from("transactions")
-    .select("id, type, amount, note, transaction_date, categories(name), accounts(name)")
+    .select("id, type, amount, note, transaction_date, category_id, categories(name), accounts(name)")
     .eq("space_id", spaceId)
     .is("deleted_at", null);
 
@@ -37,7 +36,9 @@ export default async function TransactionsPage({
   else if (category) query = query.eq("category_id", category);
   if (start) query = query.gte("transaction_date", start);
   if (end) query = query.lte("transaction_date", end);
-  query = query.order("transaction_date", { ascending: false });
+  // transaction_date is date-only, so created_at is what actually orders
+  // entries made on the same day — newest first within each date group.
+  query = query.order("transaction_date", { ascending: false }).order("created_at", { ascending: false });
   if (!isFiltered) query = query.limit(100);
 
   const [{ data: transactions }, { data: transfers }, { data: categoryRow }, t, lang] = await Promise.all([
@@ -60,6 +61,29 @@ export default async function TransactionsPage({
   for (const transfer of transfers ?? []) {
     transferIdByTransactionId.set(transfer.out_transaction_id, transfer.id);
     transferIdByTransactionId.set(transfer.in_transaction_id, transfer.id);
+  }
+
+  // The query already returns newest-first, and Map keeps insertion order, so
+  // both the groups and the rows inside them come out descending for free.
+  const groups = new Map<string, TransactionRowData[]>();
+  for (const tx of (transactions ?? []) as TransactionRowData[]) {
+    const bucket = groups.get(tx.transaction_date);
+    if (bucket) bucket.push(tx);
+    else groups.set(tx.transaction_date, [tx]);
+  }
+
+  const today = todayISO();
+  const yesterday = new Date(Date.parse(`${today}T00:00:00Z`) - 86400000).toISOString().slice(0, 10);
+  function dayLabel(date: string) {
+    if (date === today) return t.dateToday;
+    if (date === yesterday) return t.dateYesterday;
+    return formatPeriodLabel("day", date, date, lang);
+  }
+
+  function editHrefFor(tx: TransactionRowData) {
+    if (tx.type === "income" || tx.type === "expense") return `/app/${spaceId}/transactions/${tx.id}/edit`;
+    const transferId = transferIdByTransactionId.get(tx.id);
+    return transferId ? `/app/${spaceId}/transfer/${transferId}/edit` : null;
   }
 
   const filterTitle = category === "uncategorized" ? t.reportsUncategorized : (categoryRow?.name ?? t.transactionsTitle);
@@ -111,50 +135,28 @@ export default async function TransactionsPage({
         </a>
       </div>
 
-      {transactions?.length ? (
-        <Card className="divide-y divide-border p-0">
-          {transactions.map((tx) => {
-            const isInflow = tx.type === "income" || tx.type === "transfer_in";
-            const isTransfer = tx.type === "transfer_in" || tx.type === "transfer_out";
-            const editHref =
-              tx.type === "income" || tx.type === "expense"
-                ? `/app/${spaceId}/transactions/${tx.id}/edit`
-                : isTransfer && transferIdByTransactionId.has(tx.id)
-                  ? `/app/${spaceId}/transfer/${transferIdByTransactionId.get(tx.id)}/edit`
-                  : null;
-            const Row = (
-              <div className="flex items-center gap-3 px-5 py-4">
-                <span
-                  className={
-                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-full " +
-                    (isInflow ? "bg-success/10 text-success" : "bg-danger/10 text-danger")
-                  }
-                >
-                  {isInflow ? <ArrowDownLeft size={20} /> : <ArrowUpRight size={20} />}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-foreground">
-                    {tx.note || tx.categories?.name || tx.type}
-                  </p>
-                  <p className="text-sm text-foreground-muted">
-                    {tx.accounts?.name} · {tx.transaction_date}
-                  </p>
-                </div>
-                <p className={"font-semibold " + (isInflow ? "text-success" : "text-danger")}>
-                  {isInflow ? "+" : "-"}
-                  {formatIDR(tx.amount)}
-                </p>
-              </div>
+      {groups.size ? (
+        <div className="flex flex-col gap-5">
+          {[...groups.entries()].map(([date, rows]) => {
+            const net = rows.reduce(
+              (sum, tx) => sum + (tx.type === "income" || tx.type === "transfer_in" ? tx.amount : -tx.amount),
+              0
             );
-            return editHref ? (
-              <Link key={tx.id} href={editHref} className="block hover:bg-surface-muted">
-                {Row}
-              </Link>
-            ) : (
-              <div key={tx.id}>{Row}</div>
+            return (
+              <section key={date} className="rise-in flex flex-col gap-2">
+                <div className="flex items-baseline justify-between gap-3 px-1">
+                  <h2 className="text-sm font-semibold text-foreground">{dayLabel(date)}</h2>
+                  <Amount value={net} colorBySign className="text-sm font-medium" />
+                </div>
+                <Card className="divide-y divide-border p-0">
+                  {rows.map((tx) => (
+                    <TransactionRow key={tx.id} tx={tx} t={t} href={editHrefFor(tx)} />
+                  ))}
+                </Card>
+              </section>
             );
           })}
-        </Card>
+        </div>
       ) : (
         <EmptyState icon={Receipt} title={t.emptyTransactionsTitle} description={t.emptyTransactionsDescription} />
       )}

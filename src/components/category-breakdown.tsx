@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { formatIDR } from "@/lib/format";
+import { getCategoryVisual } from "@/lib/category-visuals";
 import { cn } from "@/lib/cn";
 
 export interface CategoryAmount {
@@ -12,6 +13,9 @@ export interface CategoryAmount {
   /** Share of the section's total (income or expense), 0-100 — distinct from
    * the bar width below, which is sized against the largest entry instead. */
   sharePct?: number;
+  /** Entity id (category or budget) used to pick this row's identity colour,
+   * so the same entity keeps its hue wherever it appears in the app. */
+  colorKey?: string;
 }
 
 /** Sized against this section's own largest category, not the grand total —
@@ -30,7 +34,13 @@ export function CategoryBreakdown({ entries, tone }: { entries: CategoryAmount[]
         const bar = (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-baseline justify-between gap-3 text-sm">
-              <span className="flex items-center gap-1 truncate font-medium text-foreground">
+              <span className="flex items-center gap-1.5 truncate font-medium text-foreground">
+                {entry.colorKey && (
+                  <span
+                    className="h-2.5 w-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: getCategoryVisual(entry.colorKey, entry.name).color }}
+                  />
+                )}
                 {entry.name}
                 {entry.href && <ChevronRight size={14} className="shrink-0 text-foreground-muted" />}
               </span>

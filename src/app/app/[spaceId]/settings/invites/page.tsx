@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Select } from "@/components/ui/field";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CopyInviteLink } from "@/components/copy-invite-link";
 import { BackLink } from "@/components/ui/back-link";
@@ -91,9 +92,13 @@ export default async function InvitesPage({
                 {!invite.revoked_at && (
                   <form action={revoke}>
                     <input type="hidden" name="invite_id" value={invite.id} />
-                    <button type="submit" className="text-sm font-medium text-danger hover:underline">
+                    <ConfirmSubmitButton
+                      unstyled
+                      confirmMessage={t.confirmRevokeInvite}
+                      className="text-sm font-medium text-danger hover:underline"
+                    >
                       {t.revoke}
-                    </button>
+                    </ConfirmSubmitButton>
                   </form>
                 )}
               </div>

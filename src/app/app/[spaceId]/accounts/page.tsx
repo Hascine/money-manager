@@ -12,7 +12,8 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CategoryBreakdown } from "@/components/category-breakdown";
 import { Wallet } from "lucide-react";
@@ -167,9 +168,9 @@ export default async function AccountsPage({
                 <AmountInput name="monthly_pot_budget" defaultValue={budget ?? undefined} />
               </Field>
             </div>
-            <Button type="submit" variant="secondary">
+            <SubmitButton variant="secondary">
               {t.save}
-            </Button>
+            </SubmitButton>
           </form>
           {budget !== null && budget > 0 && (
             <div className="flex flex-col gap-1.5">
@@ -216,6 +217,7 @@ export default async function AccountsPage({
                   name: pot.name,
                   amount: balances.get(pot.id) ?? 0,
                   href: `/app/${spaceId}/pots/${pot.id}/edit`,
+                  colorKey: pot.id,
                 }))
                 .sort((a, b) => b.amount - a.amount)}
             />

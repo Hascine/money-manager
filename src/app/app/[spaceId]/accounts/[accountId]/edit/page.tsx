@@ -5,7 +5,9 @@ import { getDictionary } from "@/lib/i18n/get-language";
 import { AccountFormFields } from "@/components/account-form";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
+import { ConfirmSubmitButton } from "@/components/ui/confirm-submit-button";
 import { BackLink } from "@/components/ui/back-link";
 import type { AccountType } from "@/lib/supabase/database.types";
 
@@ -80,15 +82,19 @@ export default async function EditAccountPage({
       <Card>
         <form action={update} className="flex flex-col gap-4">
           <AccountFormFields t={t} defaultValues={{ ...account, balance: currentBalance }} />
-          <Button type="submit" size="lg" className="mt-2 w-full">
+          <SubmitButton size="lg" className="mt-2 w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
       <form action={archive}>
-        <Button type="submit" variant="ghost" className="w-full text-danger hover:bg-danger/10">
+        <ConfirmSubmitButton
+          variant="ghost"
+          className="w-full text-danger hover:bg-danger/10"
+          confirmMessage={t.confirmArchiveAccount}
+        >
           {t.archiveAccount}
-        </Button>
+        </ConfirmSubmitButton>
       </form>
     </div>
   );

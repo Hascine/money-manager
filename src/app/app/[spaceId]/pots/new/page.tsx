@@ -5,7 +5,8 @@ import { getDictionary } from "@/lib/i18n/get-language";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field, Input } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
 import { BackLink } from "@/components/ui/back-link";
 
 export default async function NewPotPage({
@@ -44,9 +45,9 @@ export default async function NewPotPage({
           <Field label={t.fieldPotName}>
             <Input name="name" required placeholder="Jajan" />
           </Field>
-          <Button type="submit" size="lg" className="mt-2 w-full">
+          <SubmitButton size="lg" className="mt-2 w-full">
             {t.save}
-          </Button>
+          </SubmitButton>
         </form>
       </Card>
     </div>

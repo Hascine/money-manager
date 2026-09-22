@@ -6,7 +6,8 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Card } from "@/components/ui/card";
 import { Field, Input } from "@/components/ui/field";
 import { AmountInput } from "@/components/ui/amount-input";
-import { Button } from "@/components/ui/button";
+
+import { SubmitButton } from "@/components/ui/submit-button";
 import { BackLink } from "@/components/ui/back-link";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PiggyBank } from "lucide-react";
@@ -72,9 +73,9 @@ export default async function AllocatePotsPage({
             <Field label={t.fieldNote}>
               <Input name="note" />
             </Field>
-            <Button type="submit" size="lg" className="mt-2 w-full">
+            <SubmitButton size="lg" className="mt-2 w-full">
               {t.save}
-            </Button>
+            </SubmitButton>
           </form>
         </Card>
       ) : (
