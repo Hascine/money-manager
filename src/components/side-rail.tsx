@@ -39,7 +39,7 @@ export function SideRail() {
   return (
     <nav
       aria-label={t.mainNav}
-      className="hidden w-[4.5rem] shrink-0 flex-col items-center gap-2 self-stretch rounded-3xl bg-rail py-5 lg:flex"
+      className="hidden w-[4.5rem] shrink-0 flex-col items-center gap-2 self-stretch rounded-r-3xl bg-rail py-5 lg:flex"
     >
       <div className="relative mb-3">
         <button

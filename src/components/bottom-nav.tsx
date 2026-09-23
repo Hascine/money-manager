@@ -72,7 +72,7 @@ export function BottomNav({ spaceId }: { spaceId: string }) {
         className="fixed inset-x-0 bottom-0 z-20 rounded-t-3xl border-t border-border bg-surface/95 shadow-[0_-4px_24px_rgba(15,23,42,0.06)] backdrop-blur pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label={t.mainNav}
       >
-        <div className="mx-auto flex max-w-2xl items-stretch justify-between px-1">
+        <div className="flex w-full items-stretch justify-between px-2">
           {items.map((item) => (
             <NavLink key={item.href} {...item} />
           ))}

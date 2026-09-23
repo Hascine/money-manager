@@ -25,16 +25,19 @@ export default async function AppLayout({
   const t = await getDictionary();
 
   return (
-    // On desktop this is a fixed-height app shell: the rail and the header stay
-    // put and only <main> scrolls. Mobile keeps ordinary page scrolling, where
-    // a self-scrolling pane would fight the browser's own chrome.
-    <div className="flex min-h-full flex-col lg:mx-auto lg:h-dvh lg:min-h-0 lg:w-full lg:max-w-[110rem] lg:flex-row lg:gap-6 lg:overflow-hidden lg:p-6">
+    // On desktop this is a fixed-height, full-bleed app shell: the rail and
+    // header run edge-to-edge against the browser window (no outer margin —
+    // that used to leave a gutter around the whole app that read as a
+    // floating card on wide screens) and only <main> scrolls. Mobile keeps
+    // ordinary page scrolling, where a self-scrolling pane would fight the
+    // browser's own chrome.
+    <div className="flex min-h-full flex-col lg:h-dvh lg:min-h-0 lg:w-full lg:flex-row lg:overflow-hidden">
       <SideRail />
 
-      <div className="flex min-w-0 flex-1 flex-col lg:min-h-0 lg:gap-6">
+      <div className="flex min-w-0 flex-1 flex-col lg:min-h-0">
         {/* Sticky strip on mobile, where screen height is too precious to spend
-            on margins; a fixed bar in the shell's top row on desktop. */}
-        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-surface/95 px-4 py-3 backdrop-blur lg:static lg:shrink-0 lg:rounded-3xl lg:border lg:px-6 lg:py-4">
+            on margins; a full-width bar flush with the top edge on desktop. */}
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-surface/95 px-4 py-3 backdrop-blur lg:static lg:shrink-0 lg:px-8 lg:py-4">
           <Link href="/app" className="shrink-0">
             <Logo />
           </Link>
