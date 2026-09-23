@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { House, Receipt, Wallet, Menu, Plus, ArrowDownLeft, ArrowUpRight, ArrowLeftRight, X } from "lucide-react";
+import { House, Receipt, Wallet, Menu, Plus, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useTranslations } from "@/components/language-provider";
+import { addOptions } from "@/components/add-options";
 
 export function BottomNav({ spaceId }: { spaceId: string }) {
   const pathname = usePathname();
@@ -21,11 +22,7 @@ export function BottomNav({ spaceId }: { spaceId: string }) {
     { href: `/app/${spaceId}/more`, label: t.navMore, icon: Menu },
   ];
 
-  const addOptions = [
-    { href: `/app/${spaceId}/transactions/new?type=income`, label: t.navAddIncome, icon: ArrowDownLeft, tint: "text-success" },
-    { href: `/app/${spaceId}/transactions/new?type=expense`, label: t.navAddExpense, icon: ArrowUpRight, tint: "text-danger" },
-    { href: `/app/${spaceId}/transfer/new`, label: t.navAddTransfer, icon: ArrowLeftRight, tint: "text-brand-from" },
-  ];
+  const options = addOptions(spaceId, t);
 
   function NavLink({ href, label, icon: Icon, exact }: (typeof items)[number]) {
     const active = exact ? pathname === href : pathname.startsWith(href);
@@ -55,7 +52,7 @@ export function BottomNav({ spaceId }: { spaceId: string }) {
 
       {addOpen && (
         <div className="fixed inset-x-0 bottom-24 z-30 mx-auto flex w-full max-w-2xl flex-col gap-2 px-4">
-          {addOptions.map(({ href, label, icon: Icon, tint }) => (
+          {options.map(({ href, label, icon: Icon, tint }) => (
             <Link
               key={href}
               href={href}
