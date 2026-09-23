@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { ArrowDownLeft, ArrowUpRight, ChevronRight, Plus, TrendingDown, TrendingUp, Wallet, Receipt } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, ChevronRight, TrendingDown, TrendingUp, Receipt } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getAccountBalances } from "@/lib/balances";
 import { formatIDR } from "@/lib/format";
-import { ACCOUNT_TYPE_ICON } from "@/lib/account-icons";
 import { getPeriodRange, formatPeriodLabel, todayISO } from "@/lib/period";
 import { getExpenseTransfers } from "@/lib/transfers";
 import { getDictionary, getLanguage } from "@/lib/i18n/get-language";
 import { Card } from "@/components/ui/card";
-import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { TransactionRow, type TransactionRowData } from "@/components/transaction-row";
 import { cn } from "@/lib/cn";
@@ -27,22 +24,14 @@ export default async function SpaceDashboardPage({
 
   const [
     { data: totalBalance },
-    { data: accounts },
     { data: todayTx },
     { data: recentTx },
-    balances,
     { data: monthTx },
     expenseTransfers,
     { data: space },
     { data: allocations },
   ] = await Promise.all([
     supabase.from("space_balances").select("total_balance").eq("space_id", spaceId).maybeSingle(),
-    supabase
-      .from("accounts")
-      .select("id, name, type")
-      .eq("space_id", spaceId)
-      .is("deleted_at", null)
-      .eq("is_active", true),
     supabase
       .from("transactions")
       .select(TX_FIELDS)
@@ -58,7 +47,6 @@ export default async function SpaceDashboardPage({
       .order("transaction_date", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(8),
-    getAccountBalances(spaceId),
     supabase
       .from("transactions")
       .select("type, amount")
@@ -191,7 +179,7 @@ export default async function SpaceDashboardPage({
       </Card>
 
       {/* Today's activity */}
-      <section className="flex min-w-0 flex-col gap-3 lg:col-span-2">
+      <section className="flex min-w-0 flex-col gap-3 lg:col-span-3">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-foreground">
             {showingToday ? t.dashboardToday : t.recentTransactions}
@@ -225,49 +213,6 @@ export default async function SpaceDashboardPage({
         )}
       </section>
 
-      {/* Accounts */}
-      <section className="flex min-w-0 flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground">{t.accountsSectionTitle}</h2>
-          <Link
-            href={`/app/${spaceId}/accounts`}
-            className="flex items-center text-base font-medium text-foreground-muted transition-colors hover:text-foreground"
-          >
-            {t.seeAll}
-            <ChevronRight size={18} />
-          </Link>
-        </div>
-        {accounts?.length ? (
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
-            {accounts.map((account) => {
-              const Icon = ACCOUNT_TYPE_ICON[account.type];
-              return (
-                <Link
-                  key={account.id}
-                  href={`/app/${spaceId}/accounts/${account.id}/edit`}
-                  className="flex flex-col gap-3 rounded-3xl border border-border bg-surface p-5 transition-colors hover:bg-surface-muted lg:flex-row lg:items-center lg:gap-4"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-muted text-foreground-muted">
-                    <Icon size={20} />
-                  </span>
-                  <div className="min-w-0 lg:flex-1">
-                    <p className="truncate text-sm text-foreground-muted">{account.name}</p>
-                    <p className="tabular text-lg font-bold text-foreground">
-                      {formatIDR(balances.get(account.id) ?? 0)}
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <EmptyState icon={Wallet} title={t.emptyAccountsTitle} description={t.emptyAccountsDescription} />
-        )}
-        <ButtonLink href={`/app/${spaceId}/accounts/new`} variant="secondary" className="self-start">
-          <Plus size={18} />
-          {t.addAccount}
-        </ButtonLink>
-      </section>
     </div>
   );
 }
