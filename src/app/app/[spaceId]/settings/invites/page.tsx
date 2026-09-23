@@ -81,7 +81,7 @@ export default async function InvitesPage({
       </Card>
 
       {invites?.length ? (
-        <Card className="divide-y divide-border p-0">
+        <Card padded={false} className="divide-y divide-border">
           {invites.map((invite) => (
             <div key={invite.id} className="flex flex-col gap-3 px-5 py-4">
               <div className="flex items-center justify-between gap-2">

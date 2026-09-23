@@ -4,6 +4,7 @@ import { assertSpaceMember } from "@/lib/spaces";
 import { hasCompletedOnboarding } from "@/lib/onboarding";
 import { SpaceRealtimeProvider } from "@/components/space-realtime-provider";
 import { BottomNav } from "@/components/bottom-nav";
+import { SideRail } from "@/components/side-rail";
 
 export default async function SpaceLayout({
   children,
@@ -18,13 +19,18 @@ export default async function SpaceLayout({
   const Icon = space.type === "PERSONAL" ? User : Users;
 
   return (
-    <div className="flex flex-1 flex-col pb-24">
+    <div className="flex flex-1 gap-6 pb-24 lg:pb-8">
       <SpaceRealtimeProvider spaceId={spaceId} />
-      <div className="flex items-center gap-2 px-4 pt-5 pb-2">
-        <Icon size={18} className="text-foreground-muted" />
-        <h1 className="text-base font-semibold text-foreground-muted">{space.name}</h1>
+      <SideRail spaceId={spaceId} />
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-center gap-2 px-4 pt-5 pb-2 lg:px-0 lg:pt-6">
+          <Icon size={18} className="text-foreground-muted" />
+          <h1 className="text-base font-semibold text-foreground-muted">{space.name}</h1>
+        </div>
+        <div className="flex-1 px-4 pb-6 lg:px-0">{children}</div>
       </div>
-      <div className="flex-1 px-4 pb-6">{children}</div>
+
       <BottomNav spaceId={spaceId} />
     </div>
   );

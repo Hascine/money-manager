@@ -87,7 +87,7 @@ export default async function ReportsPage({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-6 lg:max-w-none">
       <BackLink href={`/app/${spaceId}/more`} label={t.back} />
       <PageHeader title={t.reportsTitle} />
 
@@ -139,6 +139,7 @@ export default async function ReportsPage({
         </div>
       </Card>
 
+      <div className="grid gap-6 lg:grid-cols-2">
       <div className="flex flex-col gap-3">
         <h2 className="text-lg font-bold text-foreground">{t.reportsExpenseByCategory}</h2>
         {expenseByCategory.length ? (
@@ -159,6 +160,7 @@ export default async function ReportsPage({
         ) : (
           <EmptyState icon={PieChart} title={t.emptyReportsTitle} description={t.emptyReportsDescription} />
         )}
+      </div>
       </div>
     </div>
   );

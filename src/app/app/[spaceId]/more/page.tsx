@@ -43,7 +43,7 @@ export default async function MorePage({
 
       <div>
         <p className="mb-2 px-1 text-sm font-semibold text-foreground-muted">{t.moreSpaceSection}</p>
-        <Card className="divide-y divide-border p-0">
+        <Card padded={false} className="divide-y divide-border">
           <MenuRow href={`/app/${spaceId}/categories`} icon={Tag} label={t.menuCategories} />
           <MenuRow href={`/app/${spaceId}/reports`} icon={PieChart} label={t.menuReports} />
           <MenuRow href={`/app/${spaceId}/settings`} icon={Settings} label={t.menuSpaceSettings} />
@@ -60,7 +60,7 @@ export default async function MorePage({
 
       <div>
         <p className="mb-2 px-1 text-sm font-semibold text-foreground-muted">{t.moreAccountSection}</p>
-        <Card className="divide-y divide-border p-0">
+        <Card padded={false} className="divide-y divide-border">
           <MenuRow href="/app/settings/profile" icon={User} label={t.menuProfile} />
           <MenuRow href="/app/settings/appearance" icon={Palette} label={t.menuAppearance} />
           <MenuRow href="/app/settings/language" icon={Languages} label={t.menuLanguage} />

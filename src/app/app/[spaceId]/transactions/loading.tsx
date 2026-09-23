@@ -16,7 +16,7 @@ export default function TransactionsLoading() {
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-20" />
           </div>
-          <Card className="divide-y divide-border p-0">
+          <Card padded={false} className="divide-y divide-border">
             {[0, 1, 2].map((i) => (
               <div key={i} className="flex items-center gap-3 px-5 py-4">
                 <Skeleton className="h-11 w-11 rounded-full" />

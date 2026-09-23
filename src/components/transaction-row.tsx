@@ -48,7 +48,7 @@ export function TransactionRow({
     <div className="flex items-center gap-3 px-5 py-4">
       <span
         className={cn(
-          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full",
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
           isTransfer && "bg-surface-muted text-foreground-muted"
         )}
         style={isTransfer ? undefined : { backgroundColor: visual.tint, color: visual.color }}

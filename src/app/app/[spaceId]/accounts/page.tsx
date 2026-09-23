@@ -88,7 +88,7 @@ export default async function AccountsPage({
     const typeLabels = getAccountTypeLabels(t);
 
     return accounts?.length ? (
-      <Card className="divide-y divide-border p-0">
+      <Card padded={false} className="divide-y divide-border">
         {accounts.map((account) => {
           const Icon = ACCOUNT_TYPE_ICON[account.type];
           return (

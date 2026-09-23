@@ -148,7 +148,7 @@ export default async function TransactionsPage({
                   <h2 className="text-sm font-semibold text-foreground">{dayLabel(date)}</h2>
                   <Amount value={net} colorBySign className="text-sm font-medium" />
                 </div>
-                <Card className="divide-y divide-border p-0">
+                <Card padded={false} className="divide-y divide-border">
                   {rows.map((tx) => (
                     <TransactionRow key={tx.id} tx={tx} t={t} href={editHrefFor(tx)} />
                   ))}

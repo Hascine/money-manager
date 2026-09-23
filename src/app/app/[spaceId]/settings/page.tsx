@@ -63,7 +63,7 @@ export default async function SpaceSettingsPage({
       </Card>
 
       {space.type === "COLLABORATIVE" && (
-        <Card className="divide-y divide-border p-0">
+        <Card padded={false} className="divide-y divide-border">
           <Link
             href={`/app/${spaceId}/settings/invites`}
             className="flex items-center gap-4 px-5 py-4 hover:bg-surface-muted"

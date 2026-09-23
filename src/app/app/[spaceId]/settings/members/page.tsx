@@ -58,7 +58,7 @@ export default async function MembersPage({
     <div className="mx-auto flex w-full max-w-sm flex-col gap-4">
       <BackLink href={`/app/${spaceId}/settings`} label={t.back} />
       <PageHeader title={t.membersTitle} />
-      <Card className="divide-y divide-border p-0">
+      <Card padded={false} className="divide-y divide-border">
         {members?.map((member) => (
           <div key={member.id} className="flex items-center justify-between gap-3 px-5 py-4">
             <p className="font-medium text-foreground">

@@ -23,7 +23,7 @@ export default function DashboardLoading() {
 
       <section className="flex flex-col gap-3">
         <Skeleton className="h-6 w-32" />
-        <Card className="divide-y divide-border p-0">
+        <Card padded={false} className="divide-y divide-border">
           {[0, 1, 2].map((i) => (
             <div key={i} className="flex items-center gap-3 px-5 py-4">
               <Skeleton className="h-11 w-11 rounded-full" />

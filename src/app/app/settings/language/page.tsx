@@ -28,7 +28,7 @@ export default async function LanguageSettingsPage() {
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6 px-4 py-8">
       <BackLink href="/app" label={t.back} />
       <PageHeader title={t.languageTitle} description={t.languageDescription} />
-      <Card className="divide-y divide-border p-0">
+      <Card padded={false} className="divide-y divide-border">
         {options.map((option) => (
           <form key={option.value} action={setLanguage}>
             <input type="hidden" name="lang" value={option.value} />

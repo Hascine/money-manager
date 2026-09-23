@@ -12,7 +12,7 @@ export default function AccountsLoading() {
         <Skeleton className="h-10 flex-1 rounded-full" />
         <Skeleton className="h-10 flex-1 rounded-full" />
       </div>
-      <Card className="divide-y divide-border p-0">
+      <Card padded={false} className="divide-y divide-border">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-4 px-5 py-4">
             <Skeleton className="h-11 w-11 rounded-xl" />
